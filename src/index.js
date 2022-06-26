@@ -4,7 +4,7 @@ var Stage = require('stage-js/platform/web');
 Stage(function(stage) {
 
   // Set view box
-  stage.viewbox(300, 200);
+  stage.viewbox(1000, 1000);
 
   // Create an image and append it to stage
   var box = Stage.image('box').appendTo(stage);
