@@ -11,7 +11,7 @@ Stage(function(stage) {
   // initial empty board
   const board = [];
   for(let i = 0; i < 9; i++) {
-    board[i] = makeCell(i % 3, Math.floor(i/3), function() {
+    board[i] = makeCell(x(i), y(i), function() {
       board[i].image('x');
     })
   }
@@ -24,10 +24,14 @@ Stage(function(stage) {
     }).on('click', onClick);
   }
 
-  function resetBoard(boardState) {
+  function drawBoard(boardState) {
     for(let i = 0; i < 9; i++) {
-      board[i].image('-')
+      board[i].image(boardState[x(i)][y(i)]);
     }
+  }
+
+  function resetBoard() {
+    drawBoard([['-','-','-'],['-','-','-'],['-','-','-']]);
   }
   Stage.image('reset').appendTo(stage).pin({
     alignX: 0,
@@ -35,5 +39,13 @@ Stage(function(stage) {
     handle: 0.5,
     scale: 0.05
   }).on('click', resetBoard);
+
+  function x(i) {
+    return i % 3;
+  }
+
+  function y(i) {
+    return Math.floor(i/3);
+  }
 
 });
