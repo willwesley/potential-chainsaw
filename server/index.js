@@ -1,7 +1,7 @@
-var static = require('node-static');
-var http = require('http');
+const static = require('node-static');
+const http = require('http');
 
-var file = new(static.Server)(__dirname + '/../static');
+const file = new(static.Server)(__dirname + '/../static');
 
 http.createServer(function (req, res) {
   file.serve(req, res);

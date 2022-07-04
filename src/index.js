@@ -1,4 +1,4 @@
-var Stage = require('stage-js/platform/web');
+const Stage = require('stage-js/platform/web');
 
 // Create new app
 Stage(function(stage) {
@@ -7,7 +7,7 @@ Stage(function(stage) {
   stage.viewbox(1000, 1000);
 
   // Create an image and append it to stage
-  var box = Stage.image('box').appendTo(stage);
+  const box = Stage.image('box').appendTo(stage);
 
   // Align box to center
   box.pin('align', 0.5);
