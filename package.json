@@ -8,7 +8,7 @@
     "start": "node server/index.js",
     "test": "jest",
     "test-watch": "jest --coverage --env=node --runInBand --watchAll src/*.spec.js",
-    "watch": "watchify src/tictactoeexample.js -o static/app.js -v"
+    "watch": "watchify src/index.js -o static/app.js -v"
   },
   "author": "Will Wesley",
   "license": "ISC",
