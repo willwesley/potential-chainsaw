@@ -1,11 +1,12 @@
 const Stage = require('stage-js/platform/web');
+const Game = require('./game')
 
 module.exports = function(stage) {
 
   stage.viewbox(50,50).pin('handle', -0.5);
   Stage.image('bg').pin('handle', 0.5).appendTo(stage);
 
-  let turn = 0;
+  let game = new Game();
 
   // initial empty board
   const board = [];
@@ -15,15 +16,8 @@ module.exports = function(stage) {
 
   function clickCell(i) {
     return function() {
-      if(turn >= 9) {
-        resetBoard()
-        turn = -1;
-      } else if(turn % 2 == 0) {
-        board[i].image('x');
-      } else {
-        board[i].image('o');
-      }
-      turn++
+      game.place(x(i), y(i));
+      drawBoard();
     }
   }
 
@@ -35,14 +29,15 @@ module.exports = function(stage) {
     }).on('click', onClick);
   }
 
-  function drawBoard(boardState) {
+  function drawBoard() {
     for(let i = 0; i < 9; i++) {
-      board[i].image(boardState[x(i)][y(i)]);
+      board[i].image(game.state.board[y(i)][x(i)]);
     }
   }
 
   function resetBoard() {
-    drawBoard([['-','-','-'],['-','-','-'],['-','-','-']]);
+    game = new Game();
+    drawBoard();
   }
   Stage.image('reset').appendTo(stage).pin({
     alignX: 0,
