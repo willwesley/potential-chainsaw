@@ -3,7 +3,9 @@ const Stage = require('stage-js/platform/web');
 const ratio = 20;
 
 module.exports = {
+  image: 'example.png',
   textures : {
+    'reset': { x: 144, y: 144, width: 120, height: 35 },
     'bg' : Stage.canvas(function(ctx) {
       this.size(30, 30, ratio);
       ctx.scale(ratio, ratio);
@@ -42,6 +44,6 @@ module.exports = {
     }),
     '-' : Stage.canvas(function(ctx) {
       this.size(10, 10, ratio);
-    })
+    }),
   }
 }
