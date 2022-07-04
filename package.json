@@ -3,18 +3,23 @@
   "version": "1.0.0",
   "description": "Base template for code camp",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "browserify -p tinyify src/index.js -o static/app.js",
-    "develop": "concurrently \"watchify src/index.js -o static/app.js -v\" \"npm run start\"",
-    "start": "node server/index.js"
+    "develop": "concurrently \"npm run watch\" \"npm run start\" \"npm run test-watch\"",
+    "start": "node server/index.js",
+    "test": "jest",
+    "test-watch": "jest --coverage --env=node --runInBand --watchAll src/*.spec.js",
+    "watch": "watchify src/tictactoeexample.js -o static/app.js -v"
   },
   "author": "Will Wesley",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^7.2.2",
     "node-static": "^0.7.11",
     "stage-js": "^0.9.4",
-    "tinyify": "^3.0.0",
+    "tinyify": "^3.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^7.2.2",
+    "jest": "^28.1.2",
     "watchify": "^4.0.0"
   }
 }
