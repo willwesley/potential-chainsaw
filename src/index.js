@@ -26,4 +26,19 @@ Stage(function(stage) {
       handle: 0.5
     }).on('click', onClick);
   }
+
+  function resetBoard(boardState) {
+    for(let x = 0; x < 3; x++) {
+      for(let y = 0; y < 3; y++) {
+        board[x][y].image('-')
+      }
+    }
+  }
+  Stage.image('reset').appendTo(stage).pin({
+    alignX: 0,
+    alignY: 0.4,
+    handle: 0.5,
+    scale: 0.05
+  }).on('click', resetBoard);
+
 });
