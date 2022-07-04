@@ -5,12 +5,26 @@ module.exports = function(stage) {
   stage.viewbox(50,50).pin('handle', -0.5);
   Stage.image('bg').pin('handle', 0.5).appendTo(stage);
 
+  let turn = 0;
+
   // initial empty board
   const board = [];
   for(let i = 0; i < 9; i++) {
-    board[i] = makeCell(x(i), y(i), function() {
-      board[i].image('x');
-    })
+    board[i] = makeCell(x(i), y(i), clickCell(i))
+  }
+
+  function clickCell(i) {
+    return function() {
+      if(turn >= 9) {
+        resetBoard()
+        turn = -1;
+      } else if(turn % 2 == 0) {
+        board[i].image('x');
+      } else {
+        board[i].image('o');
+      }
+      turn++
+    }
   }
 
   function makeCell(x, y, onClick) {
