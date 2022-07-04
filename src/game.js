@@ -17,7 +17,7 @@ function Game() {
     ]
     
     this.place = function(column, row) {
-        if(this.state.board[row][column] == '-') {
+        if(this.canPlace(column, row)) {
             this.state.board[row][column] = this.state.activePlayer;
             this.state.winner = this.winner();
             if(this.state.winner) {
@@ -30,6 +30,11 @@ function Game() {
                 this.state.outcome = "Cat's Game";
             }
         }
+    }
+
+    this.canPlace = function(column, row) {
+        return this.state.outcome == 'In Progress'
+            && this.state.board[row][column] == '-';
     }
 
     this.switchPlayers = function() {
