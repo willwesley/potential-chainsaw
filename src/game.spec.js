@@ -162,7 +162,7 @@ describe("Game", function() {
             game.place(2,1);
 
             expect(game.state.turn).toEqual(5);
-            expect(game.state.board[2][1]).toEqual('-');
+            expect(game.state.board[1][2]).toEqual('-');
         });
 
         it("O can win too", function() {
