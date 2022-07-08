@@ -15,7 +15,8 @@
   "dependencies": {
     "node-static": "^0.7.11",
     "stage-js": "^0.9.4",
-    "tinyify": "^3.0.0"
+    "tinyify": "^3.0.0",
+    "ws": "^8.8.0"
   },
   "devDependencies": {
     "concurrently": "^7.2.2",
