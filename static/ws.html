@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <script type="text/javascript">
+      const ws = new WebSocket('ws://' + window.location.host);
+
+      // Browser WebSockets have slightly different syntax than `ws`.
+      // Instead of EventEmitter syntax `on('open')`, you assign a callback
+      // to the `onopen` property.
+      ws.onopen = function() {
+        document.querySelector('#send').disabled = false;
+
+        document.querySelector('#send').addEventListener('click', send);
+        document.querySelector('#message').addEventListener('keypress', function(event) {
+          if(event.key === "Enter") {
+            send()
+          }
+        });
+
+        function send() {
+          ws.send(document.querySelector('#message').value);
+          document.querySelector('#message').value = ""
+        }
+      };
+
+      ws.onmessage = function(msg) {
+        console.log(msg)
+        const messageDiv = document.createElement('div')
+        messageDiv.innerText = msg.data
+        document.querySelector('#messages').append(messageDiv);
+      };
+    </script>
+  </head>
+  <body>
+    <h1>Chat</h1>
+    <div>
+      <input id="message" placeholder="Message">
+      <button id="send" disabled="true">Send</button>
+    </div>
+    <div id="messages">
+    </div>
+  </body>
+</html>
