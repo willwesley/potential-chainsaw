@@ -189,10 +189,24 @@ describe("Game", function() {
             game.place(2,0);
             game.place(0,2);
             game.place(1,2);
+            expect(game.state.outcome).not.toEqual("Cat's Game");
             game.place(2,1);
 
             expect(game.state.outcome).toEqual("Cat's Game");
             expect(game.state.winner).toEqual(false);
+        });
+
+        it("doesn't call cat's game too soon", function() {
+            game.place(0,0);
+            game.place(0,1);
+            game.place(1,0);
+            game.place(1,1);
+            game.place(2,2);
+            game.place(2,0);
+            game.place(0,2);
+            game.place(1,2);
+
+            expect(game.state.outcome).not.toEqual("Cat's Game");
         });
 
 
