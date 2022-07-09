@@ -1,8 +1,59 @@
 body {
   font-family: sans-serif;
   overflow: hidden;
+  margin: 0;
+  padding: 1em;
+  height: 100%;
 }
 
 canvas {
   background: #fff;
+}
+
+.title {
+  text-align: center;
+}
+h1 {
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.input {
+  display: flex;
+  flex-direction: row;
+  height: 3em;
+  margin-bottom: 2em;
+}
+.input input {
+  flex-grow: 1;
+}
+#messages.messages {
+  flex-grow: 1;
+}
+#messages {
+  border: 1px solid silver;
+}
+.messages .name {
+  font-weight: bold;
+  min-width: 200px;
+  max-width: 200px;
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.messages .msg {
+  flex-grow: 1;
+  display: flex;
+  padding-left: .3em;
+}
+#messages>div {
+  flex-direction: row;
+  display: flex
+}
+#messages>div:nth-child(odd) {
+  background: lightgrey;
 }

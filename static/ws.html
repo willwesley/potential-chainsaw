@@ -1,5 +1,20 @@
 <html>
   <head>
+    <title>UCCS Programming Code Camp 2022 - Websocket Demo</title>
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" rel="stylesheet" />
+    <link rel="icon" href="favicon.png" type="image/png">
+  </head>
+  <body>
+    <div class="title"><h1>Chat</h1></div>
+    <div class="container messages">
+      <div id="messages" class="messages"></div>
+      <div class="input">
+        <input id="message" placeholder="Message">
+        <button id="send" disabled="true">Send</button>
+      </div>
+    </div>
     <script type="text/javascript">
       const ws = new WebSocket('ws://' + window.location.host);
 
@@ -23,20 +38,15 @@
       };
 
       ws.onmessage = function(msg) {
-        console.log(msg)
+        const data = JSON.parse(msg.data)
+        console.log(data)
         const messageDiv = document.createElement('div')
-        messageDiv.innerText = msg.data
+        messageDiv.innerHTML = '<span class="name"></span><span class="msg"></span>'
+        console.log(messageDiv)
+        messageDiv.querySelector('.name').innerText = data.who + ':';
+        messageDiv.querySelector('.msg').innerText = data.data;
         document.querySelector('#messages').append(messageDiv);
       };
     </script>
-  </head>
-  <body>
-    <h1>Chat</h1>
-    <div>
-      <input id="message" placeholder="Message">
-      <button id="send" disabled="true">Send</button>
-    </div>
-    <div id="messages">
-    </div>
   </body>
 </html>

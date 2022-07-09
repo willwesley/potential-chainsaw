@@ -8,11 +8,21 @@ module.exports = function(server) {
       console.log('received: %s', data);
       wss.clients.forEach(function(client) {
         if (client.readyState === OPEN) {
-          client.send('(' + req.socket.remoteAddress + '): ' + data, { binary: false });
+          client.send(...makeMessage(req.socket.remoteAddress, data));
         }
       })
     });
 
-    ws.send('Hello ' + req.socket.remoteAddress);
+    ws.send(...makeMessage('SERVER', 'Hello ' + req.socket.remoteAddress));
   });
+}
+
+function makeMessage(who, data) {
+  return [
+    JSON.stringify({
+      data: `${data}`,
+      who: who
+    }),
+    { binary: false }
+  ];
 }
