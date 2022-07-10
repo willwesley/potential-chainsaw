@@ -23,6 +23,9 @@ module.exports = function(server) {
       game = new Game();
     } else {
       ws.name = 'Observer'
+      if(game) {
+        ws.send(...makeMessage('GAME', JSON.stringify(game.state)));
+      }
     }
 
     ws.on('message', function message(data) {

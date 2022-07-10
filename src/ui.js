@@ -16,6 +16,7 @@ module.exports = function(stage) {
         const state = JSON.parse(data.data);
         if(state.player) {
           me = state.player;
+          document.querySelector('#playing').innerText = `Player ${me.toUpperCase()}`;
         } else {
           game.state = state;
           drawBoard();
@@ -48,19 +49,23 @@ module.exports = function(stage) {
 
   function drawBoard() {
     for(let i = 0; i < 9; i++) {
-      board[i].image(game.state.board[y(i)][x(i)]);
+      board[i].image(game.state.board[y(i)][x(i)]).pin({ scale: 1 });
     }
     if(game.state.winner) {
       game.state.winner.forEach(cell => board[I(...cell)].tween(200).pin({
-        alpha : 1,
         scale : 1.2,
       }))
+      if(game.state.activePlayer == me) {
+        game.state.outcome = 'You Win!'
+      }
     }
+    document.querySelector('.title h1').innerText = game.state.outcome
   }
 
   function resetBoard() {
     ws.send(JSON.stringify({reset: true}));
   }
+
   Stage.image('reset').appendTo(stage).pin({
     alignX: 0,
     alignY: 0.4,

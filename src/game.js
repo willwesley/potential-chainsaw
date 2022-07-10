@@ -27,7 +27,7 @@ function Game() {
                 this.state.turn++;
             }
             if(this.state.turn > 9) {
-                this.state.outcome = "Cat's Game";
+                this.state.outcome = "Cats Game";
             }
         }
     }
