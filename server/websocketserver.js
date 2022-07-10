@@ -30,12 +30,14 @@ module.exports = function(server) {
 
       try {
         const cmd = JSON.parse(data);
+        console.log(cmd)
         if(game && game.state.outcome != 'In Progress' && cmd.reset) {
           game = new Game();
           player1.player = 'o'
           player1.send(...makeMessage('GAME', '{"player":"o"}'))
           player2.player = 'x'
           player2.send(...makeMessage('GAME', '{"player":"x"}'))
+          sendEveryone(makeMessage('GAME', JSON.stringify(game.state)))
         } else if(game && game.state.activePlayer == ws.player) {
           game.place(cmd.place.x, cmd.place.y);
           sendEveryone(makeMessage('GAME', JSON.stringify(game.state)))
@@ -43,7 +45,6 @@ module.exports = function(server) {
           ws.send(...makeMessage('SERVER', 'Wait for the other player'))
         }
       } catch (e) {
-        console.error(e)
         console.log('ignoring bad message: ' + data)
       }
     });

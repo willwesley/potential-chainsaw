@@ -7,6 +7,24 @@ module.exports = function(stage) {
   Stage.image('bg').pin('handle', 0.5).appendTo(stage);
 
   let game = new Game();
+  let me;
+  const ws = new WebSocket('ws://' + window.location.host);
+  ws.onmessage = function(msg) {
+    try {
+      const data = JSON.parse(msg.data)
+      if(data.who == "GAME") {
+        const state = JSON.parse(data.data);
+        if(state.player) {
+          me = state.player;
+        } else {
+          game.state = state;
+          drawBoard();
+        }
+      }
+    } catch(e) {
+      console.log(msg,e)
+    }
+  }
 
   // initial empty board
   const board = [];
@@ -16,8 +34,7 @@ module.exports = function(stage) {
 
   function clickCell(i) {
     return function() {
-      game.place(x(i), y(i));
-      drawBoard();
+      ws.send(JSON.stringify({place:{x:x(i), y: y(i)}}));
     }
   }
 
@@ -36,8 +53,7 @@ module.exports = function(stage) {
   }
 
   function resetBoard() {
-    game = new Game();
-    drawBoard();
+    ws.send(JSON.stringify({reset: true}));
   }
   Stage.image('reset').appendTo(stage).pin({
     alignX: 0,
