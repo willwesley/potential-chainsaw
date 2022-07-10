@@ -57,3 +57,6 @@ h1 {
 #messages>div:nth-child(odd) {
   background: lightgrey;
 }
+#messages>div.server {
+  font-weight: bolder;
+}

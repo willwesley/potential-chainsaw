@@ -39,12 +39,21 @@
 
       ws.onmessage = function(msg) {
         const data = JSON.parse(msg.data)
-        console.log(data)
         const messageDiv = document.createElement('div')
         messageDiv.innerHTML = '<span class="name"></span><span class="msg"></span>'
-        console.log(messageDiv)
         messageDiv.querySelector('.name').innerText = data.who + ':';
         messageDiv.querySelector('.msg').innerText = data.data;
+        if(data.who == 'SERVER') {
+          messageDiv.className = 'server';
+        }
+        document.querySelector('#messages').append(messageDiv);
+      };
+
+      ws.onclose = function clear() {
+        document.querySelector('#send').disabled = true;
+        const messageDiv = document.createElement('div')
+        messageDiv.innerHTML = '<span class="name"></span><span class="msg">Server Disconnected</span>'
+        messageDiv.className = 'server';
         document.querySelector('#messages').append(messageDiv);
       };
     </script>
