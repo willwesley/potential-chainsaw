@@ -50,6 +50,12 @@ module.exports = function(stage) {
     for(let i = 0; i < 9; i++) {
       board[i].image(game.state.board[y(i)][x(i)]);
     }
+    if(game.state.winner) {
+      game.state.winner.forEach(cell => board[I(...cell)].tween(200).pin({
+        alpha : 1,
+        scale : 1.2,
+      }))
+    }
   }
 
   function resetBoard() {
@@ -69,5 +75,7 @@ module.exports = function(stage) {
   function y(i) {
     return Math.floor(i/3);
   }
-
+  function I(x, y) {
+    return y*3 + x;
+  }
 }
