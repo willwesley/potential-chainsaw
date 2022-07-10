@@ -3,7 +3,7 @@ body {
   overflow: hidden;
   margin: 0;
   padding: 1em;
-  height: 100%;
+  margin-bottom: 2em;
 }
 
 canvas {
@@ -26,13 +26,13 @@ h1 {
   display: flex;
   flex-direction: row;
   height: 3em;
-  margin-bottom: 2em;
 }
 .input input {
   flex-grow: 1;
 }
 #messages.messages {
   flex-grow: 1;
+  overflow: auto;
 }
 #messages {
   border: 1px solid silver;
