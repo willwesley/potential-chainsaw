@@ -36,10 +36,7 @@ module.exports = function(server) {
         console.log(cmd)
         if(game && game.state.outcome != 'In Progress' && cmd.reset) {
           game = new Game();
-          player1.player = 'o'
-          player1.send(...makeMessage('GAME', '{"player":"o"}'))
-          player2.player = 'x'
-          player2.send(...makeMessage('GAME', '{"player":"x"}'))
+          swapPlayers();
           sendEveryone(makeMessage('GAME', JSON.stringify(game.state)))
         } else if(game && game.state.activePlayer == ws.player) {
           game.place(cmd.place.x, cmd.place.y);
@@ -63,6 +60,14 @@ module.exports = function(server) {
       sendEveryone(makeMessage('SERVER', 'Bye ' + ws.name))
     })
   });
+
+  function swapPlayers() {
+    p1was = player1.player;
+    player1.player = player2.player
+    player2.player = p1was
+    player1.send(...makeMessage('GAME', JSON.stringify({"player":player1.player}))
+    player2.send(...makeMessage('GAME', JSON.stringify({"player":player2.player}))
+  }
 
   function makeMessage(who, data) {
     return [

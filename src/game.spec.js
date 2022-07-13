@@ -189,10 +189,10 @@ describe("Game", function() {
             game.place(2,0);
             game.place(0,2);
             game.place(1,2);
-            expect(game.state.outcome).not.toEqual("Cat's Game");
+            expect(game.state.outcome).not.toEqual("Cats Game");
             game.place(2,1);
 
-            expect(game.state.outcome).toEqual("Cat's Game");
+            expect(game.state.outcome).toEqual("Cats Game");
             expect(game.state.winner).toEqual(false);
         });
 
@@ -206,7 +206,7 @@ describe("Game", function() {
             game.place(0,2);
             game.place(1,2);
 
-            expect(game.state.outcome).not.toEqual("Cat's Game");
+            expect(game.state.outcome).not.toEqual("Cats Game");
         });
 
 
