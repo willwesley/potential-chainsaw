@@ -1,8 +1,6 @@
-const { WebSocketServer, OPEN } = require('ws');
-const HeartBeat = require('./heartbeat');
+const { OPEN } = require('ws');
 
-module.exports = function(server) {
-  const wss = new WebSocketServer({ server })
+module.exports = function ChatServer(wss, HeartBeat) {
   const registerHeartbeat = HeartBeat(wss);
 
   wss.on('connection', function connection(ws, req) {
@@ -13,10 +11,11 @@ module.exports = function(server) {
       sendEveryone(makeMessage(req.socket.remoteAddress, data));
     });
 
-    sendEveryone(makeMessage('SERVER', 'Welcome ' + req.socket.remoteAddress))
     ws.on('close', function wsclose() {
       sendEveryone(makeMessage('SERVER', 'Bye ' + req.socket.remoteAddress))
-    })
+    });
+
+    sendEveryone(makeMessage('SERVER', 'Welcome ' + req.socket.remoteAddress))
   });
 
   function makeMessage(who, data) {
