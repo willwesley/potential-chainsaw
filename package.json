@@ -7,7 +7,7 @@
     "develop": "concurrently \"npm run watch\" \"nodemon start\" \"npm run test-watch\"",
     "start": "node server/index.js",
     "test": "jest",
-    "test-watch": "jest --coverage --env=node --runInBand --watchAll src/*.spec.js",
+    "test-watch": "jest --coverage --env=node --runInBand --watchAll **/*.spec.js",
     "watch": "watchify src/index.js -o static/app.js -v"
   },
   "author": "Will Wesley",
