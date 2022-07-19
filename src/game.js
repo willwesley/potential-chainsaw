@@ -1,69 +1,26 @@
-const Stage = require('stage-js/platform/web');
-
-// Create new app
-Stage(function(stage) {
-
-  // Set view box
-  stage.viewbox(1000, 1000);
-
- 
-  const jotaro = Stage.image('jotaro').appendTo(stage),
-  const dio = Stage.image('dio').appendTo(stage),
-  const ult = Stage.image('ult').appendTo(stage),
-  const lightAttack = Stage.image('lightAttack').appendTo(stage),
-  const heavyAttack = Stage.image('heavyAttack').appendTo(stage),
-  const shield = Stage.image('shield').appendTo(stage),
-  const heal = Stage.image('heal').appendTo(stage),
-  const background = Stage.image('background').appendTo(stage),
-  const starPlatinum = Stage.image('starPlatinum').appendTo(stage),
-  const theWorld = Stage.image('theWorld').appendTo(stage),
-
-  jotaro.pin('align', 0.5),
-  dio.pin('align', 0.5),
-  ult.pin('align', 0.5),
-  lightAttack.pin('align', 0.5),
-  heavyAttack.pin('align', 0.5),
-  shield.pin('align', 0.5),
-  heal.pin('align', 0.5),
-  ult.pin('align', 0.5),
-  background.pin('align', 0.5),
-  theWorld.pin('align', 0.5),
-  starPlatinum.pin('align', 0.5),
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = function Game() {
 	this.state = {
 		PlayerA: {
-			health = 100,
-			stamina = 100,
-			ultBar = 100,
+			health: 100,
+			stamina: 100,
+			ultBar: 100,
 		},
 		PlayerB : {
-			health = 100,
-			stamina = 100,
-			ultBar = 100,
+			health: 100,
+			stamina: 100,
+			ultBar: 100,
 		},
 		outcome: 'in progress'
 	}
-	const shield,
-	const shieldToStamina = 5,
-	const heal = 5,
-	const lightAttack = 5,
-	const heavyAttack = 20,
-	const ult = 35,
-	const ultChargeLightAttack = 20,
-	const ultChargeHeavyAttack = 30,
-	const ultShieldBlock = 10,
+	const shieldToStamina = 5;
+	const heal = 5;
+	const lightAttack = 5;
+	const heavyAttack = 20;
+	const ult = 35;
+	const ultChargeLightAttack = 20;
+	const ultChargeHeavyAttack = 30;
+	const ultShieldBlock = 10;
 
 	const actions = {
 		A: "",

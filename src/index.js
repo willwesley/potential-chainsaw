@@ -4,59 +4,75 @@ const Stage = require('stage-js/platform/web');
 Stage(function(stage) {
 
   // Set view box
-  stage.viewbox(1000, 1000);
+  stage.viewbox(100, 100);
 
-  // Create an image and append it to stage
-  const red = Stage.image('red').appendTo(stage);
-  const circle = Stage.image('circle').appendTo(stage);
-  const box = Stage.image('box').appendTo(stage)
+  const jotaro = Stage.image('jotaro').appendTo(stage);
+  const dio = Stage.image('dio').appendTo(stage);
+  const ult = Stage.image('ult').appendTo(stage);
+  const lightAttack = Stage.image('lightAttack').appendTo(stage);
+  const heavyAttack = Stage.image('heavyAttack').appendTo(stage);
+  const shield = Stage.image('shield').appendTo(stage);
+  const heal = Stage.image('heal').appendTo(stage);
+  const background = Stage.image('background').appendTo(stage);
+  const starPlatinum = Stage.image('starPlatinum').appendTo(stage);
+  const theWorld = Stage.image('theWorld').appendTo(stage);
 
-  // Align box to center
-  red.pin('align', 0.5);
-  box.pin('align', 0.5);
-  circle.pin('align', 0.5)
+  jotaro.pin('align', 0.5);
+  ult.pin('align', 0.5);
+  lightAttack.pin('align', 0.5);
+  heavyAttack.pin('align', 0.5);
+  shield.pin('align', 0.5);
+  heal.pin('align', 0.5);
+  ult.pin('align', 0.5);
+  background.pin('align', 0.5);
+  starPlatinum.pin('align', 0.5);
 
-  // On mouse click...
-  box.on(Stage.Mouse.MOVE, function(point) {
-    // ...tween scale values of this node
-    this.tween().ease('bounce').pin({
-      scaleX : Math.random() + 0.5,
-      scaleY : Math.random() + 0.5,
-      alignX: Math.random() + 0.00001,
-      alignY: Math.random() + 0.00001
-    });
-  });
-  circle.on(Stage.Mouse.MOVE, function(point) {
-    // ...tween scale values of this node
-    this.tween().ease('bounce').pin({
-      scaleX : Math.random() + 0.5,
-      scaleY : Math.random() + 0.5,
-      alignX: Math.random() + 0.00001,
-      alignY: Math.random() + 0.00001
-    });
-  });
-  red.on(Stage.Mouse.MOVE, function(point) {
-    // ...tween scale values of this node
-    this.tween().ease('bounce').pin({
-      scaleX : Math.random() + 0.5,
-      scaleY : Math.random() + 0.5,
-      alignX: Math.random() + 0.00001,
-      alignY: Math.random() + 0.00001
-    });
-  });
+
+  dio.pin('align', 0.1);
+  theWorld.pin('align', 0.8);
+
+
+
 });
 
+
+// Adding a texture
+// Stage({
+//   image : 'example.png',
+//   textures : {
+//     jotaro : { x : 0, y : 129, width : 67, height : 67},
+//     dio : { x : 0, y : 129, width : 67, height : 67},
+//     ult : { x : 0, y : 129, width : 67, height : 67},
+//     lightAttack : { x : 0, y : 129, width : 67, height : 67},
+//     heavyAttack : { x : 0, y : 129, width : 67, height : 67},
+//     shield : { x : 0, y : 129, width : 67, height : 67},
+//     heal : { x : 0, y : 129, width : 67, height : 67},
+//     background : { x : 0, y : 129, width : 67, height : 67},
+//     starPlatinum : { x : 0, y : 129, width : 67, height : 67},
+//     theWorld : { x : 0, y : 129, width : 67, height : 67},
+
+//   }
+// });
 
 // Adding a texture
 Stage({
   image : 'example.png',
   textures : {
-    red : { x : 0, y : 10, width : 80, height : 80},
-    circle : { x : 66, y : 129, width : 100, height : 100},
-    box : { x : 0, y : 129, width : 67, height : 67}
-
+    jotaro : { x : 0, y : 129, width : 67, height : 67},
+    starPlatinum : { x : 0, y : 129, width : 67, height : 67},
   }
 });
+
+// Adding a texture
+Stage({
+  image : 'dio.png',
+  textures : {
+    dio : { x : 0, y : 0, width : 34, height : 63},
+    theWorld : { x : 51, y : 18, width : 49, height : 69},
+  }
+});
+
+
 
 
 
