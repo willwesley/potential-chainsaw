@@ -26,15 +26,27 @@ module.exports = function Game(){
 		}
 	}
 
-	this.place = function(player, B, R) {
-		if(this.canPlace(player,x,y)) {
-			this.state.board[x][y] = player
-			this.state.turn++
-			if(this.checkWin()){
-				this.state.outcome = this.state
-			} else{
-				this.switchPlayer()
-			}
+	this.place = function(player, from, to) {
+		if(this.canPlace(player, from, to)) {
+			this.state.board[from[0]][from[1]] = ''
+			this.state.board[to[0]][to[1]] = player
 		}
+	}
+
+	this.canPlace = function(player, from, to) {
+		if(from[0] >= to[0]){
+			return false
+		}
+		if (from[1] - 1 !== to[1]&&from[1] + 1 !== to[1]){
+			return false
+		}
+		if (this.state.board[to[0]][to[1]] !== '') {
+			return false
+		}
+		if(this.state.board[from[0]][from[1]] !== player){
+			return false
+		}
+		return true 
+		
 	}
 }
