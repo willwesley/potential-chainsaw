@@ -3,7 +3,8 @@ const Game = require('./checkers')
 
 // Create new app
 Stage(function(stage) {
-
+  // click ammends
+  let from
   // Set view box
   stage.viewbox(1350, 1350);
 
@@ -13,18 +14,29 @@ Stage(function(stage) {
   const board = Stage.image("board").appendTo(stage);
   board.pin('align', 0.5)
 
-  //let piece = Stage.image('R').appendTo(stage).pin('align', 0.4)
-  //let piece = Stage.image('B').appendTo(stage).pin('align', 0.6)
-  // for(let x in game.state.board) {
-  //   for(let y in game.state.board[x]) {
-  //     console.log(game.state.board[x][y])
-  // let piece = Stage.image(game.state.board[x][y]).appendTo(stage)
-  //   }
-  // }
 
-/* 90 pixel border
-150x150 places
-*/
+  function redraw() {
+    board.empty()
+    for(let y in game.state.board) {
+      for(let x in game.state.board[y]) {
+        let piece = Stage.image(game.state.board[x][y]).appendTo(board).scaleTo(100, 100, 'in')
+        piece.pin({
+          offsetY: 90 + (150*x),
+          offsetX: 90 + (150*y)
+        })
+        piece.on(Stage.Mouse.CLICK, function(){
+          if(!from){
+            from = [1*x,1*y]
+          } else {
+            game.place(game.state.activePlayer,from,[1*x,1*y])
+            from = false 
+            redraw()
+          }
+        })
+      }
+    }
+  }
+  redraw()
 
 });
 
@@ -39,14 +51,14 @@ Stage({
 Stage({
   image : 'red.png',
   textures : {
-    R : { x : 0, y : 0, width : 65, height : 50 }
+    R : { x : 0, y : 0, width : 600, height : 600 }
   }
 });
 
 Stage({
   image : 'black.png',
   textures : {
-    B : { x : 0, y : 129, width : 65, height : 65 },
-    '' : { x : 0, y : 0, width : 1, height : 1 }
+    B : { x : 0, y : 0, width : 600, height : 600 },
+    ' ' : { x : 0, y : 0, width : 1, height : 1 }
   }
 });
