@@ -11,7 +11,8 @@ module.exports = function Game() {
 			stamina: 100,
 			ultBar: 100,
 		},
-		outcome: 'in progress'
+		outcome: 'in progress',
+		lastActions: { A: '', B: ''}
 	}
 	const shieldToStamina = 5;
 	const heal = 5;
@@ -35,7 +36,7 @@ module.exports = function Game() {
 			}
 		}
 		if(myAction == 'shield') {
-			player.stamina += shieldStamina
+			player.stamina += shieldToStamina
 			return;
 		}
 		if(myAction == 'heal') {
@@ -45,7 +46,7 @@ module.exports = function Game() {
 			player.health -= lightAttack
 			opponent.ultBar += ultChargeLightAttack
 		}
-		else if(thierAction == 'heavyAttack') {
+		else if(theirAction == 'heavyAttack') {
 			player.health -= heavyAttack
 			opponent.ultBar += ultChargeHeavyAttack
 		}
@@ -56,9 +57,11 @@ module.exports = function Game() {
 			return
 		}
 		actions[player] = action
+		console.log(player, action, actions)
 		if(actions.A !== "" && actions.B !== "") {
 			mechanics(this.state.PlayerA, this.state.PlayerB, actions.A, actions.B)
 			mechanics(this.state.PlayerB, this.state.PlayerA, actions.B, actions.A)
+			this.state.lastActions = actions
 			actions.A = ""
 			actions.B = ""
 			if(this.state.PlayerA.health <= 0 && this.state.PlayerB.health <= 0) {
@@ -69,6 +72,9 @@ module.exports = function Game() {
 			}
 			else if(this.state.PlayerB.health <= 0) {
 				this.state.outcome = 'PlayerA won'
+			}
+			if(this.onTurnEnd) {
+				this.onTurnEnd()
 			}
 		}
 	}
