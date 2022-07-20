@@ -1,44 +1,52 @@
 const Stage = require('stage-js/platform/web');
+const Game = require('./checkers')
 
 // Create new app
 Stage(function(stage) {
 
   // Set view box
-  stage.viewbox(1000, 1000);
+  stage.viewbox(1350, 1350);
+
+  const game = new Game()
 
   // Create an image and append it to stage
-  const box = Stage.image("box").appendTo(stage);
-  const square = Stage.image("box").appendTo(stage);
-  // Align box to center
-  box.pin('align', 0.5);
-  square.pin('align', 0.7);
-  // On mouse click...
-  box.on('click', function(point) {
-    // ...tween scale values of this node
-    this.tween().ease('bounce').pin({
-      scaleX : Math.random() + 0.5,
-      scaleY : Math.random() + 0.5,
-      alignX: Math.random(),
-      alignY: Math.random()
-    });
-  });
-  square.on('click', function(point) {
-    // ...tween scale values of this node
-    this.tween().ease('bounce').pin({
-      scaleX : Math.random() + 0.5,
-      scaleY : Math.random() + 0.5,
-      alignX: Math.random(),
-      alignY: Math.random()
-    })
-  })
+  const board = Stage.image("board").appendTo(stage);
+  board.pin('align', 0.5)
+
+  //let piece = Stage.image('R').appendTo(stage).pin('align', 0.4)
+  //let piece = Stage.image('B').appendTo(stage).pin('align', 0.6)
+  // for(let x in game.state.board) {
+  //   for(let y in game.state.board[x]) {
+  //     console.log(game.state.board[x][y])
+  // let piece = Stage.image(game.state.board[x][y]).appendTo(stage)
+  //   }
+  // }
+
+/* 90 pixel border
+150x150 places
+*/
 
 });
 
 
 // Adding a texture
 Stage({
-  image : 'example.png',
+  image : 'board.jfif',
   textures : {
-    box : { x : 0, y : 129, width : 65, height : 65 }
+    board : { x : 0, y : 0, width : 1350, height : 1350}
+  }
+});
+Stage({
+  image : 'red.png',
+  textures : {
+    R : { x : 0, y : 0, width : 65, height : 50 }
+  }
+});
+
+Stage({
+  image : 'black.png',
+  textures : {
+    B : { x : 0, y : 129, width : 65, height : 65 },
+    '' : { x : 0, y : 0, width : 1, height : 1 }
   }
 });
