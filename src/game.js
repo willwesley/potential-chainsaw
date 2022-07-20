@@ -8,30 +8,16 @@ function Game() {
 			number: number
 		}
 	}
-	this.state = {
-		hands: [ [], [], [], [], ],
-		activePlayer: 0,
-		turn: 1,
-		outcome: 'In Progress',
-		direction: "L",
-		topcard: this.randomCard()
-	}
-	this.drawCard = function(player, hands) {
-		this.nextplayer(let(hands = 0 hands < 8))
-
-		this.playCard = function(player, card) {
+	this.playCard = function(player, card) {
 		if(this.canPlay(player, card)) {
 			this.state.topcard = card
 			this.nextPlayer()
 		}
 	}
-}
-
 
 	this.drawCard = function(player, hands) {
 		this.state.hands[this.state.activePlayer].push(this.randomCard())
 		this.nextPlayer()
-
 	}
 
 	this.canPlay = function(player, card) {
@@ -60,9 +46,22 @@ function Game() {
 			}
 		}
 	}
+
+	this.state = {
+		hands: [ [], [], [], [], ],
+		activePlayer: 0,
+		turn: 1,
+		outcome: 'In Progress',
+		direction: "L",
+		topcard: this.randomCard()
+	}
+	for(let i = 0; i < 28; i++) {
+		this.drawCard()
+	}
+
 }
 Game.COLORS = [
-	'RED', 'YELLOW', 'BLUE', 'GREEN'
+	'RED', 'YELLOW', 'GREEN', 'BLUE'
 ]
 
 module.exports = Game
