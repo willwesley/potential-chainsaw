@@ -127,6 +127,13 @@ Stage(function(stage) {
     'alignY' : 0.1
   }).on(Stage.Mouse.CLICK, function() {
     game.action('B', 'ultB')
+    this.tween().ease('bounce').pin ({
+      scale : 0.75
+    })
+  }).on(Stage.Mouse.START, function(){
+    this.tween().ease('bounce').pin ({
+      scale : 0.70
+    })
   });
   lightAttackB.pin({
     'scale' : 0.75,
@@ -134,6 +141,13 @@ Stage(function(stage) {
     'alignY' : 0.1
   }).on(Stage.Mouse.CLICK, function() {
     game.action('B', 'lightAttackB')
+    this.tween().ease('bounce').pin ({
+      scale : 0.75
+    })
+  }).on(Stage.Mouse.START, function(){
+    this.tween().ease('bounce').pin ({
+      scale : 0.70
+    })
   });
   heavyAttackB.pin({
     'scale' : 0.75,
@@ -141,6 +155,13 @@ Stage(function(stage) {
     'alignY' : 0.1
   }).on(Stage.Mouse.CLICK, function() {
     game.action('B', 'heavyAttackB')
+    this.tween().ease('bounce').pin ({
+      scale : 0.75
+    })
+  }).on(Stage.Mouse.START, function(){
+    this.tween().ease('bounce').pin ({
+      scale : 0.70
+    })
   });
   shieldB.pin({
     'scale' : 0.75,
@@ -148,6 +169,13 @@ Stage(function(stage) {
     'alignY' : 0.1
   }).on(Stage.Mouse.CLICK, function() {
     game.action('B', 'shieldB')
+    this.tween().ease('bounce').pin ({
+      scale : 0.75
+    })
+  }).on(Stage.Mouse.START, function(){
+    this.tween().ease('bounce').pin ({
+      scale : 0.70
+    })
   });
   healB.pin({
     'scale' : 0.73,
@@ -155,6 +183,13 @@ Stage(function(stage) {
     'alignY' : 0.1
   }).on(Stage.Mouse.CLICK, function() {
     game.action('B', 'healB')
+    this.tween().ease('bounce').pin ({
+      scale : 0.75
+    })
+  }).on(Stage.Mouse.START, function(){
+    this.tween().ease('bounce').pin ({
+      scale : 0.70
+    })
   });
 
 
@@ -174,6 +209,7 @@ Stage(function(stage) {
 
 
 
+ function update() {
   const healthScore = Stage.string('numbers').value(game.state.PlayerA.health).appendTo(healthBar)
   healthScore.pin({
     'scale': 0.25,
@@ -193,6 +229,7 @@ Stage(function(stage) {
     'alignX': .95,
     'alignY': .5
   })
+ }
 
   game.onTurnEnd = function() {
     console.log('OlO')
@@ -278,8 +315,6 @@ Stage({
     muda : { x : 0, y : 0, width : 99, height : 72},
   }
 });
-
-
 
 
 
