@@ -10,33 +10,53 @@ Stage(function(stage) {
   // Set view box
   stage.viewbox(500, 500);
 
-  // The hand
-  const hand = Stage.create().appendTo(stage);
-  const numCards = game.state.hands[0].length
-  for(let i in game.state.hands[0]) {
-    let card = game.state.hands[0][i]
-    let sprite = Stage.image(card.color + card.number).appendTo(hand);
-    sprite.pin('alignY', 1)
-    sprite.offset(50*(i-Math.floor(numCards/2)), 0)
+
+  function redraw() {
+    stage.empty()
+    // The hand
+    const hand = Stage.create().appendTo(stage);
+    const numCards = game.state.hands[0].length
+    for(let i in game.state.hands[0]) {
+      let card = game.state.hands[0][i]
+      let sprite = Stage.image(card.color + card.number).appendTo(hand);
+      sprite.pin('alignY', 1)
+      sprite.offset(50*(i-Math.floor(numCards/2)), 0)
+      sprite.on("click", function(){
+        game.playCard(0,card)
+        redraw()
+      })
+    }
+    hand.pin({
+      alignX: 0.5,
+      alignY: 1
+    })
+
+    // Adding Discard Pile
+    let topcard = game.state.topcard
+    let discard = Stage.image(topcard.color + topcard.number).appendTo(stage);
+       discard.pin({
+       alignX: 0.5,
+       alignY: 0.5
+    })
+   
+    // Adding Draw Pile
+    let drawpile = Stage.image('cardback').appendTo(stage);
+    drawpile.pin({
+      alignX: 0.7,
+      alignY: 0.5
+    })
+    drawpile.on("click", function(){
+      game.drawCard()
+      redraw()
+    })
   }
-  hand.pin({
-    alignX: 0.5,
-    alignY: 1
-  })
-  //const box = Stage.image(card.color + card.number).appendTo(stage);
-
-  // // Align box to center
-  // box.pin('align', 0.5);
-
-  // // On mouse click...
-  // box.on('click', function(point) {
-  //   // ...tween scale values of this node
-  //   this.tween(1000).ease('bounce').pin({
-  //     scaleX : Math.random() + 1.022,
-  //     scaleY : Math.random() + 1.0675675676621435
-  //   });
-  // });
+  redraw()
 });
-  
+
 // Adding a texture
 Stage(Textures)
+
+
+
+
+

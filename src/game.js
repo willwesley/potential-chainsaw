@@ -11,11 +11,12 @@ function Game() {
 	this.playCard = function(player, card) {
 		if(this.canPlay(player, card)) {
 			this.state.topcard = card
+			this.state.hands[player].splice(this.state.hands[player].indexOf(card), 1)
 			this.nextPlayer()
 		}
 	}
 
-	this.drawCard = function(player, hands) {
+	this.drawCard = function() {
 		this.state.hands[this.state.activePlayer].push(this.randomCard())
 		this.nextPlayer()
 	}
