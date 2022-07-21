@@ -2,7 +2,7 @@
 function Game() {
 	this.randomCard = function() {
 		const colorIndex = Math.floor(Math.random()*4)
-		const number = Math.ceil(Math.random()*12)
+		const number = Math.ceil(Math.random()*14)
 		return {
 			color: Game.COLORS[colorIndex],
 			number: number
@@ -11,7 +11,12 @@ function Game() {
 	this.playCard = function(player, card) {
 		if(this.canPlay(player, card)) {
 			this.state.topcard = card
-			this.state.hands[player].splice(this.state.hands[player].indexOf(card), 1)
+			this.state.hands[player].splice(this.state.hands[player].findIndex(function(c) {
+				if(card.number >= 13) {
+					return c.number === card.number
+				}
+				return card == c
+			}), 1)
 			console.log(card)
 			if(card.number === 10) {
 				this.nextPlayer() 
@@ -28,7 +33,7 @@ function Game() {
 				this.state.hands[this.state.activePlayer].push(this.randomCard())
 				this.state.hands[this.state.activePlayer].push(this.randomCard())
 		    }
-		    
+
 			this.nextPlayer()
 		}
 	}
@@ -46,6 +51,9 @@ function Game() {
 			return true
 		}
 		if(card.number === this.state.topcard.number) {
+			return true
+		}
+		if (card.number === 13) {
 			return true
 		}
 		return false

@@ -14,7 +14,7 @@ Stage(function(stage) {
   function redraw() {
     stage.empty()
     Stage.image('background').appendTo(stage).pin({
-      scale:1
+      scale:0.6
     })
     // The hand
     for(let hand in game.state.hands) {
@@ -23,13 +23,32 @@ Stage(function(stage) {
       for(let i in game.state.hands[hand]) {
         let card = game.state.hands[hand][i]
         let sprite = Stage.image(card.color + card.number).appendTo(handsprite);
+        if(card.number === 13){
+          sprite.image('wild')
+        }
         sprite.pin('alignY', 1)
         sprite.offset(50*(i-Math.floor(numCards/2)), 0)
         sprite.on("click", function(point){
-          console.log(i, numCards - 1)
           if(point.x < 50 || 1*i === (numCards - 1)) {
-            game.playCard(hand*1, card)
-            redraw()
+            if(card.number === 13) {
+              const wildPicker = Stage.create().appendTo(stage);
+              for(let color in Game.COLORS) {
+                Stage.image(Game.COLORS[color] + 13)
+                  .appendTo(wildPicker)
+                  .offset(50*(color-2), 0)
+                  .on('click', function() {
+                    game.playCard(hand*1, {
+                      color: Game.COLORS[color],
+                      number: 13
+                    })
+                    redraw()
+                  })
+              }
+              wildPicker.pin('align', 0.5)
+            } else {
+              game.playCard(hand*1, card)
+              redraw()
+            }
           }
         })
       }

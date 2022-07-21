@@ -15,8 +15,9 @@ for(let color in COLORS) {
     cardTextures[COLORS[color] + '10'] = { x: 853, width: 86, y: color * 128, height: 128 }
     cardTextures[COLORS[color] + '11'] = { x: 938, width: 86, y: color * 128, height: 128 }
     cardTextures[COLORS[color] + '12'] = { x: 1024, width: 86, y: color * 128, height: 128 }
-    cardTextures['WILD'] = { x: 1109, width: 86, y: color * 128, height: 128 }
+    cardTextures[COLORS[color] + '13'] = { x: 85, width: 86, y: 511 + color * 128, height: 128 }
 }
+cardTextures.wild = { x: 1109, width: 86, y: 128, height: 128 }
 cardTextures.cardback = { x: 0, width: 86, y: 511, height: 128 }
 
 module.exports = {
