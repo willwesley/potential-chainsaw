@@ -4,24 +4,26 @@ module.exports = function Game() {
 		PlayerA: {
 			health: 100,
 			stamina: 100,
-			ultBar: 100,
+			ultBar: 0,
 		},
 		PlayerB : {
 			health: 100,
 			stamina: 100,
-			ultBar: 100,
+			ultBar: 0,
 		},
 		outcome: 'in progress',
 		lastActions: { A: '', B: ''}
 	}
 	const shieldToStamina = 5;
 	const heal = 5;
-	const lightAttack = 5;
+	const lightAttack = 10;
 	const heavyAttack = 20;
-	const ult = 35;
+	const ult = 30;
 	const ultChargeLightAttack = 20;
 	const ultChargeHeavyAttack = 30;
 	const ultShieldBlock = 10;
+	const lightAttackStamina = 10
+	const heavyAttackStamina = 20
 
 	const actions = {
 		A: "",
@@ -30,26 +32,54 @@ module.exports = function Game() {
 
 
 	function mechanics (player, opponent, myAction, theirAction) {
-		if(theirAction == 'ult') {
+		if(opponent.ultBar == 100 && theirAction == 'ult') {
+			player.health -= ult
+			opponent.ultBar = 0
 			if(myAction == 'shield') {
-				player.health = ult - ultShieldBlock
+				player.health += ultShieldBlock
 			}
 		}
+			
 		if(myAction == 'shield') {
 			player.stamina += shieldToStamina
+			if(player.stamina < 0) {
+				player.stamina = 0
+			}
+			if(player.stamina > 100) {
+				player.stamina = 100
+			}
 			return;
 		}
 		if(myAction == 'heal') {
 			player.health += heal
 		}
-		if(theirAction == 'lightAttack') {
+		if (opponent.stamina >= 10 && theirAction == 'lightAttack') {
 			player.health -= lightAttack
 			opponent.ultBar += ultChargeLightAttack
+			opponent.stamina -= lightAttackStamina
 		}
-		else if(theirAction == 'heavyAttack') {
+		
+		if(opponent.stamina >= 20 && theirAction == 'heavyAttack') {
 			player.health -= heavyAttack
 			opponent.ultBar += ultChargeHeavyAttack
+			opponent.stamina -= heavyAttackStamina
 		}
+		if(player.health < 0) {
+			player.health = 0
+		}
+		if(player.health > 100) {
+			player.health = 100
+		}
+		if(opponent.stamina < 0) {
+			opponent.stamina = 0
+		}
+		if(opponent.stamina > 100) {
+			opponent.stamina = 100
+		}
+		if(opponent.ultBar > 100) {
+			opponent.ultBar = 100
+		}
+
 	}
 
 	this.action = function(player, action) {
