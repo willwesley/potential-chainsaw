@@ -65,8 +65,8 @@ module.exports = function(server) {
     p1was = player1.player;
     player1.player = player2.player
     player2.player = p1was
-    player1.send(...makeMessage('GAME', JSON.stringify({"player":player1.player}))
-    player2.send(...makeMessage('GAME', JSON.stringify({"player":player2.player}))
+    player1.send(...makeMessage('GAME', JSON.stringify({"player":player1.player})))
+    player2.send(...makeMessage('GAME', JSON.stringify({"player":player2.player})))
   }
 
   function makeMessage(who, data) {
