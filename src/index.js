@@ -1,44 +1,64 @@
 const Stage = require('stage-js/platform/web');
+const Game = require('./checkers')
 
 // Create new app
 Stage(function(stage) {
-
+  // click ammends
+  let from
   // Set view box
-  stage.viewbox(1000, 1000);
+  stage.viewbox(1350, 1350);
+
+  const game = new Game()
 
   // Create an image and append it to stage
-  const box = Stage.image("box").appendTo(stage);
-  const square = Stage.image("box").appendTo(stage);
-  // Align box to center
-  box.pin('align', 0.5);
-  square.pin('align', 0.7);
-  // On mouse click...
-  box.on('click', function(point) {
-    // ...tween scale values of this node
-    this.tween().ease('bounce').pin({
-      scaleX : Math.random() + 0.5,
-      scaleY : Math.random() + 0.5,
-      alignX: Math.random(),
-      alignY: Math.random()
-    });
-  });
-  square.on('click', function(point) {
-    // ...tween scale values of this node
-    this.tween().ease('bounce').pin({
-      scaleX : Math.random() + 0.5,
-      scaleY : Math.random() + 0.5,
-      alignX: Math.random(),
-      alignY: Math.random()
-    })
-  })
+  const board = Stage.image("board").appendTo(stage);
+  board.pin('align', 0.5)
+
+
+  function redraw() {
+    board.empty()
+    for(let y in game.state.board) {
+      for(let x in game.state.board[y]) {
+        let piece = Stage.image(game.state.board[x][y]).appendTo(board).scaleTo(100, 100, 'in')
+        piece.pin({
+          offsetY: 90 + (150*x),
+          offsetX: 90 + (150*y)
+        })
+        piece.on(Stage.Mouse.CLICK, function(){
+          if(!from){
+            from = [1*x,1*y]
+          } else {
+            game.place(game.state.activePlayer,from,[1*x,1*y])
+            from = false 
+            redraw()
+          }
+        })
+      }
+    }
+  }
+  redraw()
 
 });
 
 
 // Adding a texture
 Stage({
-  image : 'example.png',
+  image : 'board.jfif',
   textures : {
-    box : { x : 0, y : 129, width : 65, height : 65 }
+    board : { x : 0, y : 0, width : 1350, height : 1350}
+  }
+});
+Stage({
+  image : 'red.png',
+  textures : {
+    R : { x : 0, y : 0, width : 600, height : 600 }
+  }
+});
+
+Stage({
+  image : 'black.png',
+  textures : {
+    B : { x : 0, y : 0, width : 600, height : 600 },
+    ' ' : { x : 0, y : 0, width : 1, height : 1 }
   }
 });
