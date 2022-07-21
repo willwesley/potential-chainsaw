@@ -8,13 +8,14 @@ Stage(function(stage) {
   const game = new Game();
 
   // Set view box
-  stage.viewbox(500, 500);
+  stage.viewbox(1024,768);
 
 
   function redraw() {
     stage.empty()
     Stage.image('background').appendTo(stage).pin({
-      scale:0.6
+      height: stage.height(),
+      width: stage.width()
     })
     // The hand
     for(let hand in game.state.hands) {
@@ -58,17 +59,17 @@ Stage(function(stage) {
       let pin = {}
       if(hand === '0'){
         pin.alignX = 0.45
-        pin.alignY = 1.0
+        pin.alignY = 0.95
       } else if(hand === '1'){
-        pin.alignX = 0
+        pin.alignX = 0.05
         pin.alignY = 0.4
         pin.rotation = Math.PI/2
       } else if(hand === '2'){
         pin.alignX = 0.55
-        pin.alignY = 0
+        pin.alignY = 0.05
         pin.rotation = Math.PI
      } else {
-        pin.alignX = 1.0
+        pin.alignX = 0.95
         pin.alignY = 0.55
         pin.rotation = -Math.PI/2
       }
