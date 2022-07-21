@@ -2,7 +2,7 @@
 module.exports = function Game() {
 	this.state = {
 		PlayerA: {
-			health: 10,
+			health: 100,
 			stamina: 100,
 			ultBar: 0,
 		},
