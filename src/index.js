@@ -26,20 +26,23 @@ Stage(function(stage) {
         if(card.number === 13){
           sprite.image('wild')
         }
+        if(card.number === 14){
+          sprite.image('plus4')
+        }
         sprite.pin('alignY', 1)
         sprite.offset(50*(i-Math.floor(numCards/2)), 0)
         sprite.on("click", function(point){
           if(point.x < 50 || 1*i === (numCards - 1)) {
-            if(card.number === 13) {
+            if(card.number >= 13) {
               const wildPicker = Stage.create().appendTo(stage);
               for(let color in Game.COLORS) {
-                Stage.image(Game.COLORS[color] + 13)
+                Stage.image(Game.COLORS[color] + card.number)
                   .appendTo(wildPicker)
                   .offset(50*(color-2), 0)
                   .on('click', function() {
                     game.playCard(hand*1, {
                       color: Game.COLORS[color],
-                      number: 13
+                      number: card.number
                     })
                     redraw()
                   })

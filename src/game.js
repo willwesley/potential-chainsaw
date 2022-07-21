@@ -33,6 +33,13 @@ function Game() {
 				this.state.hands[this.state.activePlayer].push(this.randomCard())
 				this.state.hands[this.state.activePlayer].push(this.randomCard())
 		    }
+		    if(card.number === 14) {
+				this.nextPlayer()
+				this.state.hands[this.state.activePlayer].push(this.randomCard())
+				this.state.hands[this.state.activePlayer].push(this.randomCard())
+				this.state.hands[this.state.activePlayer].push(this.randomCard())
+				this.state.hands[this.state.activePlayer].push(this.randomCard())
+		    }
 
 			this.nextPlayer()
 		}
@@ -53,7 +60,7 @@ function Game() {
 		if(card.number === this.state.topcard.number) {
 			return true
 		}
-		if (card.number === 13) {
+		if (card.number >= 13) {
 			return true
 		}
 		return false
