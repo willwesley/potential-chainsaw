@@ -12,6 +12,23 @@ function Game() {
 		if(this.canPlay(player, card)) {
 			this.state.topcard = card
 			this.state.hands[player].splice(this.state.hands[player].indexOf(card), 1)
+			console.log(card)
+			if(card.number === 10) {
+				this.nextPlayer() 
+			}
+			if(card.number === 11) {
+				if(this.state.direction === 'L') {
+				    this.state.direction = 'R'
+				} else {
+				    this.state.direction = 'L'
+				}
+			}
+			if(card.number === 12) {
+				this.nextPlayer()
+				this.state.hands[this.state.activePlayer].push(this.randomCard())
+				this.state.hands[this.state.activePlayer].push(this.randomCard())
+		    }
+		    
 			this.nextPlayer()
 		}
 	}
