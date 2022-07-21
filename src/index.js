@@ -24,14 +24,24 @@ Stage(function(stage) {
           offsetY: 90 + (150*x),
           offsetX: 90 + (150*y)
         })
-        piece.on(Stage.Mouse.CLICK, function(){
-          if(!from){
-            from = [1*x,1*y]
-          } else {
-            game.place(game.state.activePlayer,from,[1*x,1*y])
-            from = false 
+        piece.on(Stage.Mouse.START, function(){
+          from = [1*x,1*y]
+          function Move(point){
+            piece.offset(point.x - 35, point.y - 35)
+          }
+          function Stop(point) {
+            const to = [
+              Math.floor((point.y - 90)/150),
+              Math.floor((point.x - 90)/150),
+            ]
+            console.log(to)
+            game.place(game.state.activePlayer,from,to)
+            board.off(Stage.Mouse.MOVE, Move)
+            board.off(Stage.Mouse.END, Stop)
             redraw()
           }
+          board.on(Stage.Mouse.MOVE, Move)
+          board.on(Stage.Mouse.END, Stop)
         })
       }
     }
@@ -60,5 +70,19 @@ Stage({
   textures : {
     B : { x : 0, y : 0, width : 600, height : 600 },
     ' ' : { x : 0, y : 0, width : 1, height : 1 }
+  }
+});
+
+Stage({
+  image : 'BlackK.png',
+  textures : {
+    BK : { x : 0, y : 0, width : 200, height : 200 }
+  }
+});
+
+Stage({
+  image : 'RedK.png',
+  textures : {
+    RK : { x : 0, y : 0, width : 512, height : 512 }
   }
 });

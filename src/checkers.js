@@ -28,37 +28,59 @@ module.exports = function Game(){
 
 	this.place = function(player, from, to) {
 		if(this.canPlace(player, from, to)) {
+			this.state.board[to[0]][to[1]] = this.state.board[from[0]][from[1]]
 			this.state.board[from[0]][from[1]] = ' '
-			this.state.board[to[0]][to[1]] = player
+			if(player == 'B' && to[0] < 1 || player == 'R' && to[0] > 6) {
+				this.state.board[to[0]][to[1]] = player + 'K'
+			}
 			this.changePlayers()
 		}
 	}
 
 	this.canPlace = function(player, from, to) {
-		if(player['R'] && from[0] >= to[0]){
+		console.log(this.state.board[from[0]][from[1]])
+		let jumping = false
+		// red no go backward
+		if(player == 'R' && from[0] >= to[0] && this.state.board[from[0]][from[1]] !== 'RK'){
 			return false
 		}
-		if(player ['B'] && from[0] <= to[0]){
+		// black no go backward
+		if(player == 'B' && from[0] <= to[0] && this.state.board[from[0]][from[1]] !== 'BK'){
 			return false
 		}
+		// moving more than one diagonal
 		if (from[1] - 1 !== to[1]&&from[1] + 1 !== to[1]){
-			if(Math.abs(from[1] - to[1]) === 2) {
+			// is a jump
+			if(Math.abs(from[1] - to[1]) === 2 && Math.abs(from[0] - to[0]) === 2) {
 				const inbetween = getInBetween(from, to)
+				// no piece between
 				if(this.state.board[inbetween[0]][inbetween[1]] === ' ') {
 					return false
 				}
+				// own player's piece between
 				if(this.state.board[inbetween[0]][inbetween[1]] === this.state.activePlayer) {
 					return false
 				}
-			} else {
+				// remove jumped piece
+				jumping = true
+			} else { // some other random unlawful move
 				return false
 			}
 		}
+		if(Math.abs(from[0] - to[0]) !== Math.abs(from[1] - to[1])){
+			return false
+		}
+		// destination not empty
 		if (this.state.board[to[0]][to[1]] !== ' ') {
 			return false
 		}
-		if(this.state.board[from[0]][from[1]] !== player){
+		// source doesn't have piece owned by player
+		if(this.state.board[from[0]][from[1]][0] !== player){
 			return false
+		}
+		if(jumping) {
+			const inbetween = getInBetween(from, to)
+			this.state.board[inbetween[0]][inbetween[1]] = ' '
 		}
 		return true 
 		
