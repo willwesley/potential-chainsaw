@@ -2,14 +2,14 @@
 module.exports = function Game() {
 	this.state = {
 		PlayerA: {
-			health: 100,
+			health: 10,
 			stamina: 100,
-			ultBar: 100,
+			ultBar: 0,
 		},
 		PlayerB : {
 			health: 100,
 			stamina: 100,
-			ultBar: 100,
+			ultBar: 0,
 		},
 		outcome: 'in progress',
 		lastActions: { A: '', B: ''}

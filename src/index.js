@@ -8,7 +8,6 @@ Stage(function(stage) {
   // Set view box
   stage.viewbox(200, 200);
 
-  const bucket = Stage.create().appendTo(stage).pin('align', 0.5)
 
   const background = Stage.image('background').appendTo(stage);
   const jotaro = Stage.image('jotaro').appendTo(stage);
@@ -35,6 +34,7 @@ Stage(function(stage) {
   const ultBarB = Stage.image('ultBarB').appendTo(stage);
 
 
+  const bucket = Stage.create().appendTo(stage).pin('align', 0.5)
 
 
   ult.pin({
@@ -49,21 +49,23 @@ Stage(function(stage) {
       })
 
       jotaro.image('jotaroWhite').pin({
-        alignX: 0.92,
-        alignY: 0.6,
-        scale:0.7
+        alignX: 0,
+        alignY: 0.8,
+        scale:1.5
 
       })
       setTimeout(function() {
         jotaro.image('starPlatinum').pin({
-          alignX: 0.09
+          alignX: 0.1,
+          alignY:0.9,
+          scale:1.5
         })
         Stage.anim('shake', fps = 15).appendTo(jotaro).pin({
           alignX: 0.4,
           alignY: -0.4,
-          scale: 0.7
+          scale: 0.8
         }).play()
-      }, 1000)
+      }, 100)
     }
 
   }).on(Stage.Mouse.START, function(){
@@ -356,9 +358,13 @@ Stage(function(stage) {
     'alignY': .5
   })
 
-  // if(game.state.outcome != 'in progress') {
-  //   // Stage.image(game.state.outcome).appendTo(bucket).pin()
-  // }
+  console.log(game.state.outcome)
+  if(game.state.outcome != 'in progress') {
+    Stage.image(game.state.outcome).appendTo(bucket).pin({
+      align:0.5,
+      scale:0.4
+    })
+  }
  }
   update()
   game.onTurnEnd = function() {
@@ -463,9 +469,22 @@ Stage({
 Stage({
   image: 'jotarowhiteout.png',
   textures : {
-    dioWhite : { x : 0, y : 0, width : 100, height : 89},
+    jotaroWhite : { x : 0, y : 0, width : 100, height : 89},
   }
 })
+Stage({
+  image: 'jotarowins.png',
+  textures : {
+    'PlayerA won' : { x : 17, y : 133, width : 662, height : 192},
+  }
+})
+Stage({
+  image: 'diowins.png',
+  textures : {
+    'PlayerB won' : { x : 33, y : 95, width : 645, height : 274},
+  }
+})
+
 
 
 
