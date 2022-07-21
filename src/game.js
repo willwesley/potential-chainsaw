@@ -4,12 +4,12 @@ module.exports = function Game() {
 		PlayerA: {
 			health: 100,
 			stamina: 100,
-			ultBar: 0,
+			ultBar: 100,
 		},
 		PlayerB : {
 			health: 100,
 			stamina: 100,
-			ultBar: 0,
+			ultBar: 100,
 		},
 		outcome: 'in progress',
 		lastActions: { A: '', B: ''}
