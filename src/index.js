@@ -16,18 +16,21 @@ Stage(function(stage) {
   const heavyAttack = Stage.image('heavyAttack').appendTo(stage);
   const shield = Stage.image('shield').appendTo(stage);
   const heal = Stage.image('heal').appendTo(stage);
-  const starPlatinum = Stage.image('starPlatinum').appendTo(stage);
-  const theWorld = Stage.image('theWorld').appendTo(stage);
+  // const starPlatinum = Stage.image('starPlatinum').appendTo(stage);
+  //const theWorld = Stage.image('theWorld').appendTo(stage);
   const staminaBar = Stage.image('staminaBar').appendTo(stage);
   const healthBar = Stage.image('healthBar').appendTo(stage);
   const ultBar = Stage.image('ultBar').appendTo(stage);
-  const ora = Stage.image('ora').appendTo(stage);
-  const muda = Stage.image('muda').appendTo(stage);
+  //const menacing1 = Stage.image('menacing1').appendTo(stage);
+ // const menacing2 = Stage.image('menacing2').appendTo(stage);
   const ultB = Stage.image('ultB').appendTo(stage);
   const lightAttackB = Stage.image('lightAttackB').appendTo(stage);
   const heavyAttackB = Stage.image('heavyAttackB').appendTo(stage);
   const shieldB = Stage.image('shieldB').appendTo(stage);
   const healB = Stage.image('healB').appendTo(stage);
+  const staminaBarB = Stage.image('staminaBarB').appendTo(stage);
+  const healthBarB = Stage.image('healthBarB').appendTo(stage);
+  const ultBarB = Stage.image('ultBarB').appendTo(stage);
 
 
 
@@ -37,7 +40,25 @@ Stage(function(stage) {
     'alignX' : 0.5585,
     'alignY' : 0.92
   }).on(Stage.Mouse.CLICK, function() {
-    game.action('A', 'ult')
+    if(game.state.PlayerA.ultBar === 100) {
+      game.action('A', 'ult')
+      this.tween().ease('bounce').pin ({
+        scale : 1.2
+      })
+      jotaro.image('starPlatinum').pin({
+        alignX: 0.09
+      })
+      Stage.anim('shake', fps = 15).appendTo(stage).pin({
+        alignX: 0.09,
+        alignY: 0.45
+      }).play()
+    }
+  }).on(Stage.Mouse.START, function(){
+    if(game.state.PlayerA.ultBar === 100) {
+      this.tween().ease('bounce').pin ({
+        scale : 1
+      })
+    }
   });
   lightAttack.pin({
     'scale' : 0.75,
@@ -45,6 +66,13 @@ Stage(function(stage) {
     'alignY' : 0.894
   }).on(Stage.Mouse.CLICK, function() {
     game.action('A', 'lightAttack')
+    this.tween().ease('bounce').pin ({
+      scale : 0.75
+    })
+  }).on(Stage.Mouse.START, function(){
+    this.tween().ease('bounce').pin ({
+      scale : 0.70
+    })
   });
   staminaBar.pin({
     'scale' : 0.62,
@@ -61,72 +89,27 @@ Stage(function(stage) {
     'alignX' : 0.558,
     'alignY' : 0.98
   });
+  staminaBarB.pin({
+    'scale' : 0.62,
+    'alignX' : 0.75,
+    'alignY' : 0.04
+  });
+  healthBarB.pin({
+    'scale' : 0.64,
+    'alignX' : 0.36,
+    'alignY' : 0.04
+  });
+  ultBarB.pin({
+    'scale' : 0.7,
+    'alignX' : 0.558,
+    'alignY' : 0.04
+  });
   heavyAttack.pin({
     'scale' : 0.75,
     'alignX' : 0.347,
     'alignY' : 0.89
   }).on(Stage.Mouse.CLICK, function() {
     game.action('A', 'heavyAttack')
-  });
-  shield.pin({
-    'scale' : 0.75,
-    'alignX' : 0.66,
-    'alignY' : 0.897
-  }).on(Stage.Mouse.CLICK, function() {
-    game.action('A', 'shield')
-  });
-  heal.pin({
-    'scale' : 0.73,
-    'alignX' : 0.75,
-    'alignY' : 0.89
-  }).on(Stage.Mouse.CLICK, function() {
-    game.action('A', 'heal')
-  });
-  background.pin({
-    'scale' : 0.8,
-    'alignX' : 1,
-    'alignY' : 1
-  });
-  ora.pin({
-    'scale' : 1,
-    'alignX' : 0.1,
-    'alignY' : 0.45
-  });;
-  muda.pin({
-    'scale' : 0.8,
-    'alignX' : 0.92,
-    'alignY' : 0.45
-  });;
-
-
-  dio.pin({
-    'scale' : 0.8,
-    'alignX' : 0.87,
-    'alignY' : 0.6
-  });
-  theWorld.pin({
-    'scale' : 0.8,
-    'alignX' : 0.86,
-    'alignY' : 0.58
-  });
-
-  jotaro.pin({
-    'scale' : 1.5,
-    'alignX' : 0.15,
-    'alignY' : 0.85
-  });
-  starPlatinum.pin({
-    'scale' : 1.5,
-    'alignX' : 0.09,
-    'alignY' : 0.85
-  });
-
-  ultB.pin({
-    'scale' : 1.2,
-    'alignX' : 0.5585,
-    'alignY' : 0.1
-  }).on(Stage.Mouse.CLICK, function() {
-    game.action('B', 'ultB')
     this.tween().ease('bounce').pin ({
       scale : 0.75
     })
@@ -135,12 +118,105 @@ Stage(function(stage) {
       scale : 0.70
     })
   });
+  shield.pin({
+    'scale' : 0.75,
+    'alignX' : 0.66,
+    'alignY' : 0.897
+  }).on(Stage.Mouse.CLICK, function() {
+    game.action('A', 'shield')
+    this.tween().ease('bounce').pin ({
+      scale : 0.75
+    })
+  }).on(Stage.Mouse.START, function(){
+    this.tween().ease('bounce').pin ({
+      scale : 0.70
+    })
+  });
+  heal.pin({
+    'scale' : 0.73,
+    'alignX' : 0.75,
+    'alignY' : 0.89
+  }).on(Stage.Mouse.CLICK, function() {
+    game.action('A', 'heal')
+    this.tween().ease('bounce').pin ({
+      scale : 0.75
+    })
+  }).on(Stage.Mouse.START, function(){
+    this.tween().ease('bounce').pin ({
+      scale : 0.70
+    })
+  });
+  background.pin({
+    'scale' : 0.8,
+    'alignX' : 1,
+    'alignY' : 1
+  });
+  // menacing1.pin({
+  //   'scale' : 1,
+  //   'alignX' : 0.1,
+  //   'alignY' : 0.45
+  // });;
+  // menacing2.pin({
+  //   'scale' : 0.8,
+  //   'alignX' : 0.92,
+  //   'alignY' : 0.45
+  // });;
+
+
+  dio.pin({
+    'scale' : 0.8,
+    'alignX' : 0.87,
+    'alignY' : 0.6
+  });
+  // theWorld.pin({
+  //   'scale' : 0.8,
+  //   'alignX' : 0.86,
+  //   'alignY' : 0.58,
+  // });
+
+  jotaro.pin({
+    'scale' : 1.5,
+    'alignX' : 0.15,
+    'alignY' : 0.85
+  });
+  // starPlatinum.pin({
+  //   'scale' : 1.5,
+  //   'alignX' : 0.09,
+  //   'alignY' : 0.85
+  // });
+
+  ultB.pin({
+    'scale' : 1.2,
+    'alignX' : 0.5585,
+    'alignY' : 0.1
+  }).on(Stage.Mouse.CLICK, function() {
+    if(game.state.PlayerB.ultBar === 100) {
+      game.action('B', 'ult')
+      this.tween().ease('bounce').pin ({
+        scale : 1.2
+      })
+      dio.image('theWorld').pin({
+        alignX: 0.86
+      })
+      Stage.anim('shake', fps = 15).appendTo(stage).pin({
+        alignX: 0.92,
+        alignY: 0.45
+      }).play()
+    }
+  }).on(Stage.Mouse.START, function(){
+    if(game.state.PlayerB.ultBar === 100) {
+      this.tween().ease('bounce').pin ({
+        scale : 1
+      })
+    }
+
+  });
   lightAttackB.pin({
     'scale' : 0.75,
     'alignX' : 0.45,
     'alignY' : 0.1
   }).on(Stage.Mouse.CLICK, function() {
-    game.action('B', 'lightAttackB')
+    game.action('B', 'lightAttack')
     this.tween().ease('bounce').pin ({
       scale : 0.75
     })
@@ -154,7 +230,7 @@ Stage(function(stage) {
     'alignX' : 0.347,
     'alignY' : 0.1
   }).on(Stage.Mouse.CLICK, function() {
-    game.action('B', 'heavyAttackB')
+    game.action('B', 'heavyAttack')
     this.tween().ease('bounce').pin ({
       scale : 0.75
     })
@@ -168,7 +244,7 @@ Stage(function(stage) {
     'alignX' : 0.66,
     'alignY' : 0.1
   }).on(Stage.Mouse.CLICK, function() {
-    game.action('B', 'shieldB')
+    game.action('B', 'shield')
     this.tween().ease('bounce').pin ({
       scale : 0.75
     })
@@ -182,7 +258,7 @@ Stage(function(stage) {
     'alignX' : 0.75,
     'alignY' : 0.1
   }).on(Stage.Mouse.CLICK, function() {
-    game.action('B', 'healB')
+    game.action('B', 'heal')
     this.tween().ease('bounce').pin ({
       scale : 0.75
     })
@@ -210,29 +286,53 @@ Stage(function(stage) {
 
 
  function update() {
+  healthBar.empty()
   const healthScore = Stage.string('numbers').value(game.state.PlayerA.health).appendTo(healthBar)
   healthScore.pin({
     'scale': 0.25,
     'alignX': .95,
     'alignY': .5
   })
+  ultBar.empty()
   const ultScore = Stage.string('numbers').value(game.state.PlayerA.ultBar).appendTo(ultBar)
   ultScore.pin({
     'scale': 0.25,
     'alignX': .95,
     'alignY': .5
   })
-
+  staminaBar.empty()
   const staminaScore = Stage.string('numbers').value(game.state.PlayerA.stamina).appendTo(staminaBar)
   staminaScore.pin({
     'scale': 0.25,
     'alignX': .95,
     'alignY': .5
   })
+  healthBarB.empty()
+  const healthScoreB = Stage.string('numbers').value(game.state.PlayerB.health).appendTo(healthBarB)
+  healthScoreB.pin({
+    'scale': 0.25,
+    'alignX': .95,
+    'alignY': .5
+  })
+  ultBarB.empty()
+  const ultScoreB = Stage.string('numbers').value(game.state.PlayerB.ultBar).appendTo(ultBarB)
+  ultScoreB.pin({
+    'scale': 0.25,
+    'alignX': .95,
+    'alignY': .5
+  })
+  staminaBarB.empty()
+  const staminaScoreB = Stage.string('numbers').value(game.state.PlayerB.stamina).appendTo(staminaBarB)
+  staminaScoreB.pin({
+    'scale': 0.25,
+    'alignX': .95,
+    'alignY': .5
+  })
  }
-
+  update()
   game.onTurnEnd = function() {
     console.log('OlO')
+    update()
   }
 
 });
@@ -294,6 +394,9 @@ Stage({
     staminaBar : { x : 1, y : 58, width : 98, height : 16},
     healthBar : { x : 1, y : 73, width : 99, height : 14},
     ultBar : { x : 1, y : 86, width : 98, height : 13},
+    staminaBarB : { x : 1, y : 58, width : 98, height : 16},
+    healthBarB : { x : 1, y : 73, width : 99, height : 14},
+    ultBarB : { x : 1, y : 86, width : 98, height : 13},
     heavyAttackB : { x : 4, y : 1, width : 31, height : 28},
     lightAttackB : { x : 35, y : 0.5, width : 31, height : 29},
     shieldB : { x : 53, y : 28.5, width : 33, height : 31},
@@ -311,8 +414,12 @@ Stage({
 Stage({
   image : 'ora.png',
   textures : {
-    ora : { x : 0, y : 0, width : 99, height : 72},
-    muda : { x : 0, y : 0, width : 99, height : 72},
+    menacing1 : { x : 0, y : 0, width : 99, height : 72},
+    menacing2 : { x : 0, y : 0, width : 99, height : 72},
+    shake : [
+      { x : 0, y : 0, width : 99, height : 62},
+      { x : 0,  y : 3, width : 99, height : 72 }
+    ]
   }
 });
 
