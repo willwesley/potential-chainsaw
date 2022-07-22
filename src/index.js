@@ -95,6 +95,13 @@ Stage(function(stage) {
       game.drawCard()
       redraw()
     })
+
+    if(game.state.outcome !== 'In Progress') {
+      Stage.string('winner').value(game.state.outcome).appendTo(stage).pin({
+        'alignX': 0.5,
+        'alignY': 0.35
+      })
+    }
   }
   redraw()
 });
