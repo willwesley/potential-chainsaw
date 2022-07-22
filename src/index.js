@@ -44,9 +44,6 @@ Stage(function(stage) {
     if(game.state[me].ultBar === 100) {
       ws.send(JSON.stringify({action: 'ult'}))
 
-      // this.tween().ease('bounce').pin ({
-      //   scale : 1.2
-      // })
       if(me === 'PlayerA') {
         flashJotaro()
       } else {
@@ -150,7 +147,7 @@ Stage(function(stage) {
     'scale' : 1.5,
     'alignX' : 0.15,
     'alignY' : 0.895
-  });
+  })
 
 
   function flashJotaro() {
