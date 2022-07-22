@@ -60,14 +60,19 @@ module.exports = function(stage) {
     if(game.state.winner && game.state.activePlayer == me) {
       document.querySelectorAll('.title h1').forEach(c => c.innerText = 'You Win!')
       funk.image('reset').on('click', resetBoard);
+      funk.off('click', quitBoard);
     } else {
       funk.image('quit').on('click', quitBoard);
+      funk.off('click', resetBoard);
     }
   }
 
   function resetBoard() {
     ws.send(JSON.stringify({reset: true}));
     me = false
+    if(ws.onquiter) {
+      ws.onquiter()
+    }
   }
 
   function quitBoard() {

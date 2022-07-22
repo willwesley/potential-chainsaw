@@ -23,6 +23,7 @@ module.exports = function(server) {
           players[cmd.claim] = ws
           ws.player = [' ', 'x', 'o'][cmd.claim]
           ws.send(...makeMessage('GAME', '{"player":"'+ws.player+'"}'))
+          sendPlayerStates()
           if(game) {
             ws.send(...makeMessage('GAME', JSON.stringify(game.state)));
           }
@@ -33,10 +34,9 @@ module.exports = function(server) {
         } else if(game && game.state.outcome != 'In Progress' && cmd.reset) {
           players = []
           sendEveryone(makeMessage('RESET', ''))
+          sendPlayerStates()
         } else if(cmd.quit) {
           chump(ws)
-          sendEveryone(makeMessage('GAME', JSON.stringify(game.state)))
-          game = new Game()
         } else if(game && game.state.activePlayer == ws.player) {
           game.place(cmd.place.x, cmd.place.y);
           sendEveryone(makeMessage('GAME', JSON.stringify(game.state)))
@@ -52,20 +52,31 @@ module.exports = function(server) {
     })
 
     function chump(ws) {
-      game.state.winner = true
       if(ws == players[1]) {
         players[1] = undefined
         if(game) {
           game.state.outcome = 'O Wins'
           game.state.activePlayer = 'o'
+          game.state.winner = true
         }
       } else if(ws == players[2]) {
         players[2] = undefined
         if(game) {
           game.state.outcome = 'X Wins'
           game.state.activePlayer = 'x'
+          game.state.winner = true
         }
       }
+      if(game) {
+        sendEveryone(makeMessage('GAME', JSON.stringify(game.state)))
+      }
+      sendPlayerStates()
+    }
+
+    function sendPlayerStates() {
+      sendEveryone(makeMessage('SERVER', JSON.stringify({
+        players: [ '', !!players[1], !!players[2] ]
+      })))
     }
   });
 

@@ -52,7 +52,6 @@
       };
 
       ws.onmessage = function(msg) {
-        console.log(msg)
         const data = JSON.parse(msg.data)
         const messageDiv = document.createElement('div')
         messageDiv.innerHTML = '<span class="name"></span><span class="msg"></span>'
@@ -60,9 +59,19 @@
         messageDiv.querySelector('.msg').innerText = data.data;
         if(data.who == 'SERVER') {
           messageDiv.className = 'server';
+          try {
+            const parsed = JSON.parse(data.data)
+            if(parsed.players) {
+              document.querySelector('#p1').disabled = parsed.players[1]
+              document.querySelector('#p2').disabled = parsed.players[2]
+            }
+          } catch {}
         }
         if(data.who == 'GAME' && !!ws.ongamemessage) {
           ws.ongamemessage(data)
+        }
+        if(data.who == 'RESET') {
+          ws.onquiter()
         }
         document.querySelector('#messages').append(messageDiv);
       };
