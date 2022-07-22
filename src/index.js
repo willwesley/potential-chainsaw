@@ -29,6 +29,23 @@ Stage(function(stage) {
       height: stage.height(),
       width: stage.width()
     })
+    if(game.state.direction === 'L') {
+      Stage.image('right').appendTo(stage).pin({
+        alignX:0.2,
+        alignY:0.9,
+        rotation: -Math.PI/2,
+        scale: 0.5
+      })
+    } else {
+      Stage.image('left').appendTo(stage).pin({
+        alignX:0.8,
+        alignY:0.9,
+        rotation: Math.PI/2,
+        scale: 0.5
+      })
+    }
+
+    Stage.image('left')
     // The hands
     const leHands = [
       ['0','1','2','3'],
@@ -41,6 +58,7 @@ Stage(function(stage) {
       const numCards = game.state.hands[hand].length
       for(let i in game.state.hands[hand]) {
         let card = game.state.hands[hand][i]
+
         let sprite = Stage.image(card.color + card.number).appendTo(handsprite);
         if(card.number === 13){
           sprite.image('wild')
@@ -76,6 +94,14 @@ Stage(function(stage) {
           }
         })
       }
+
+      if(game.state.activePlayer == hand) {
+        Stage.image('up').appendTo(handsprite).pin({
+          alignY: 2.5,
+          alignX: -0.5,
+          scale: 0.2
+        })
+      }
       let pin = {}
 
       if(hand == leHands[0]){
@@ -94,6 +120,7 @@ Stage(function(stage) {
         pin.alignY = 0.55
         pin.rotation = -Math.PI/2
       }
+
       handsprite.pin(pin)
 
     }
@@ -139,3 +166,14 @@ Stage({
 })
 
 
+// Arrows
+Stage(Textures)
+
+Stage({
+  image : 'arrows.png',
+  textures: {
+    left: {x:3,y: 13, width: 179, height: 149},
+    right: {x:237 ,y:4 , width: 179 , height:149 },
+    up: {x:139 ,y:178 , width:425 , height:404 }
+  }
+})
