@@ -13,6 +13,9 @@ module.exports = function(server) {
     ws.name = 'Player ' + Math.ceil(Math.random() * 9999)
     console.log(ws.name)
     sendEveryone(makeMessage('SERVER', 'Welcome ' + ws.name))
+    ws.send(...makeMessage('SERVER', JSON.stringify({
+      players: [ '', !!players[1], !!players[2] ]
+    })))
 
     ws.on('message', function message(data) {
       sendEveryone(makeMessage(ws.name, data));
