@@ -6,68 +6,68 @@ module.exports = function(server) {
   const wss = new WebSocketServer({ server })
   const registerHeartbeat = HeartBeat(wss);
 
-  let player1, player2, game;
+  let game;
+  let players = [];
   wss.on('connection', function connection(ws) {
     registerHeartbeat(ws);
-
-    if(!player1) {
-      player1 = ws;
-      ws.name = 'Player 1'
-      ws.player = 'x'
-      ws.send(...makeMessage('GAME', '{"player":"x"}'))
-    } else if(!player2) {
-      player2 = ws;
-      ws.name = 'Player 2'
-      ws.player = 'o'
-      ws.send(...makeMessage('GAME', '{"player":"o"}'))
-      game = new Game();
-    } else {
-      ws.name = 'Observer'
-      if(game) {
-        ws.send(...makeMessage('GAME', JSON.stringify(game.state)));
-      }
-    }
+    ws.name = 'Player ' + Math.ceil(Math.random() * 9999)
+    console.log(ws.name)
+    sendEveryone(makeMessage('SERVER', 'Welcome ' + ws.name))
 
     ws.on('message', function message(data) {
       sendEveryone(makeMessage(ws.name, data));
 
       try {
         const cmd = JSON.parse(data);
-        console.log(cmd)
-        if(game && game.state.outcome != 'In Progress' && cmd.reset) {
-          game = new Game();
-          swapPlayers();
+        if(cmd.claim && !players[cmd.claim]) {
+          players[cmd.claim] = ws
+          ws.player = [' ', 'x', 'o'][cmd.claim]
+          ws.send(...makeMessage('GAME', '{"player":"'+ws.player+'"}'))
+          if(game) {
+            ws.send(...makeMessage('GAME', JSON.stringify(game.state)));
+          }
+          if(players[1] && players[2]) {
+            game = new Game();
+            sendEveryone(makeMessage('GAME', JSON.stringify(game.state)))
+          }
+        } else if(game && game.state.outcome != 'In Progress' && cmd.reset) {
+          players = []
+          sendEveryone(makeMessage('RESET', ''))
+        } else if(cmd.quit) {
+          chump(ws)
           sendEveryone(makeMessage('GAME', JSON.stringify(game.state)))
+          game = new Game()
         } else if(game && game.state.activePlayer == ws.player) {
           game.place(cmd.place.x, cmd.place.y);
           sendEveryone(makeMessage('GAME', JSON.stringify(game.state)))
-        } else {
-          ws.send(...makeMessage('SERVER', 'Wait for the other player'))
         }
       } catch (e) {
-        console.log('ignoring bad message: ' + data)
+        // chat message hopefully
       }
     });
 
-    sendEveryone(makeMessage('SERVER', 'Welcome ' + ws.name))
-    ws.on('close', function wsclose() {
-      if(ws == player1) {
-        player1 = undefined
-      } else if(ws == player2) {
-        player2 = undefined
-      }
-
+    ws.on('close', function() {
+      chump(ws)
       sendEveryone(makeMessage('SERVER', 'Bye ' + ws.name))
     })
-  });
 
-  function swapPlayers() {
-    p1was = player1.player;
-    player1.player = player2.player
-    player2.player = p1was
-    player1.send(...makeMessage('GAME', JSON.stringify({"player":player1.player})))
-    player2.send(...makeMessage('GAME', JSON.stringify({"player":player2.player})))
-  }
+    function chump(ws) {
+      game.state.winner = true
+      if(ws == players[1]) {
+        players[1] = undefined
+        if(game) {
+          game.state.outcome = 'O Wins'
+          game.state.activePlayer = 'o'
+        }
+      } else if(ws == players[2]) {
+        players[2] = undefined
+        if(game) {
+          game.state.outcome = 'X Wins'
+          game.state.activePlayer = 'x'
+        }
+      }
+    }
+  });
 
   function makeMessage(who, data) {
     return [

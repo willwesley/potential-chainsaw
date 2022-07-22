@@ -56,3 +56,8 @@ h1 {
 #messages>div.server {
   font-weight: bolder;
 }
+.chat {
+  z-index: 1000;
+  position: relative;
+  background: white;
+}

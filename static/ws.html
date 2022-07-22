@@ -7,16 +7,30 @@
     <link rel="icon" href="favicon.png" type="image/png">
   </head>
   <body>
-    <div class="title"><h1>Chat</h1></div>
-    <div class="container messages">
-      <div id="messages" class="messages"></div>
-      <div class="input">
-        <input id="message" placeholder="Message">
-        <button id="send" disabled="true">Send</button>
+    <div class='chat'>
+      <div class="gamebox">
+        <span>Current Game:</span>
+        <button id="p1">Player 1</button>
+        <button id="p2">Player 2</button>
+        <button id="p0">Observe</button>
+      </div>
+      <div class="title"><h1>Chat</h1></div>
+      <div class="container messages">
+        <div id="messages" class="messages"></div>
+        <div class="input">
+          <input id="message" placeholder="Message">
+          <button id="send" disabled="true">Send</button>
+        </div>
       </div>
     </div>
+    <div class="title">
+      <h1>Waiting</h1>
+      <div id="playing">Observer</div>
+    </div>
+
     <script type="text/javascript">
       const ws = new WebSocket('ws://' + window.location.host);
+      window.ws = ws
 
       // Browser WebSockets have slightly different syntax than `ws`.
       // Instead of EventEmitter syntax `on('open')`, you assign a callback
@@ -38,6 +52,7 @@
       };
 
       ws.onmessage = function(msg) {
+        console.log(msg)
         const data = JSON.parse(msg.data)
         const messageDiv = document.createElement('div')
         messageDiv.innerHTML = '<span class="name"></span><span class="msg"></span>'
@@ -45,6 +60,9 @@
         messageDiv.querySelector('.msg').innerText = data.data;
         if(data.who == 'SERVER') {
           messageDiv.className = 'server';
+        }
+        if(data.who == 'GAME' && !!ws.ongamemessage) {
+          ws.ongamemessage(data)
         }
         document.querySelector('#messages').append(messageDiv);
       };
@@ -56,6 +74,17 @@
         messageDiv.className = 'server';
         document.querySelector('#messages').append(messageDiv);
       };
+
+      for(let i = 0; i <= 2; i++) {
+        document.querySelector('#p' + i).onclick = () => {
+          document.querySelector('.chat').hidden = true
+          ws.send(JSON.stringify({ claim: i }))
+        }
+      }
+      ws.onquiter = function() {
+        document.querySelector('.chat').hidden = false
+      }
     </script>
+    <script src="app.js"></script>
   </body>
 </html>

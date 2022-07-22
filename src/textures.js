@@ -6,6 +6,7 @@ module.exports = {
   image: 'example.png',
   textures : {
     'reset': { x: 144, y: 144, width: 120, height: 35 },
+    'quit': { x: 297, y: 156, width: 98, height: 43 },
     'bg' : Stage.canvas(function(ctx) {
       this.size(30, 30, ratio);
       ctx.scale(ratio, ratio);

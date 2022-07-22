@@ -8,22 +8,16 @@ module.exports = function(stage) {
 
   let game = new Game();
   let me;
-  const ws = new WebSocket('ws://' + window.location.host);
-  ws.onmessage = function(msg) {
-    try {
-      const data = JSON.parse(msg.data)
-      if(data.who == "GAME") {
-        const state = JSON.parse(data.data);
-        if(state.player) {
-          me = state.player;
-          document.querySelector('#playing').innerText = `Player ${me.toUpperCase()}`;
-        } else {
-          game.state = state;
-          drawBoard();
-        }
-      }
-    } catch(e) {
-      console.log(msg,e)
+  const ws = window.ws
+  ws.ongamemessage = function(data) {
+    const state = JSON.parse(data.data);
+    if(state.player) {
+      me = state.player;
+      document.querySelector('#playing').innerText = `Player ${me.toUpperCase()}`;
+    } else {
+      game.state = state;
+      document.querySelectorAll('.title h1').forEach(c => c.innerText = game.state.outcome)
+      drawBoard();
     }
   }
 
@@ -47,31 +41,43 @@ module.exports = function(stage) {
     }).on('click', onClick);
   }
 
-  function drawBoard() {
-    for(let i = 0; i < 9; i++) {
-      board[i].image(game.state.board[y(i)][x(i)]).pin({ scale: 1 });
-    }
-    if(game.state.winner) {
-      game.state.winner.forEach(cell => board[I(...cell)].tween(200).pin({
-        scale : 1.2,
-      }))
-      if(game.state.activePlayer == me) {
-        game.state.outcome = 'You Win!'
-      }
-    }
-    document.querySelector('.title h1').innerText = game.state.outcome
-  }
-
-  function resetBoard() {
-    ws.send(JSON.stringify({reset: true}));
-  }
-
-  Stage.image('reset').appendTo(stage).pin({
+  const funk = Stage.image('quit').appendTo(stage).pin({
     alignX: 0,
     alignY: 0.4,
     handle: 0.5,
     scale: 0.05
-  }).on('click', resetBoard);
+  });
+
+  function drawBoard() {
+    for(let i = 0; i < 9; i++) {
+      board[i].image(game.state.board[y(i)][x(i)]).pin({ scale: 1 });
+    }
+    if(game.state.winner && game.state.winner.length) {
+      game.state.winner.forEach(cell => board[I(...cell)].tween(200).pin({
+        scale : 1.2,
+      }))
+    }
+    if(game.state.winner && game.state.activePlayer == me) {
+      document.querySelectorAll('.title h1').forEach(c => c.innerText = 'You Win!')
+      funk.image('reset').on('click', resetBoard);
+    } else {
+      funk.image('quit').on('click', quitBoard);
+    }
+  }
+
+  function resetBoard() {
+    ws.send(JSON.stringify({reset: true}));
+    me = false
+  }
+
+  function quitBoard() {
+    if(!!me) {
+      ws.send(JSON.stringify({ quit: true }))
+    }
+    if(ws.onquiter) {
+      ws.onquiter()
+    }
+  }
 
   function x(i) {
     return i % 3;
