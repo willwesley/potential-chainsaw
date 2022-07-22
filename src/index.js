@@ -29,23 +29,7 @@ Stage(function(stage) {
       height: stage.height(),
       width: stage.width()
     })
-    if(game.state.direction === 'L') {
-      Stage.image('right').appendTo(stage).pin({
-        alignX:0.2,
-        alignY:0.9,
-        rotation: -Math.PI/2,
-        scale: 0.5
-      })
-    } else {
-      Stage.image('left').appendTo(stage).pin({
-        alignX:0.8,
-        alignY:0.9,
-        rotation: Math.PI/2,
-        scale: 0.5
-      })
-    }
 
-    Stage.image('left')
     // The hands
     const leHands = [
       ['0','1','2','3'],
@@ -69,7 +53,7 @@ Stage(function(stage) {
         sprite.pin('alignY', 1)
         sprite.offset(50*(i-Math.floor(numCards/2)), 0)
         sprite.on("click", function(point){
-          if(point.x < 50 || 1*i === (numCards - 1)) {
+          if(game.state.activePlayer == hand && point.x < 50 || 1*i === (numCards - 1)) {
             if(card.number >= 13) {
               const wildPicker = Stage.create().appendTo(stage);
               for(let color in Game.COLORS) {
@@ -123,6 +107,22 @@ Stage(function(stage) {
 
       handsprite.pin(pin)
 
+    }
+
+    if(game.state.direction === 'L') {
+      Stage.image('right').appendTo(stage).pin({
+        alignX:0.2,
+        alignY:0.9,
+        rotation: -Math.PI/2,
+        scale: 0.5
+      })
+    } else {
+      Stage.image('left').appendTo(stage).pin({
+        alignX:0.8,
+        alignY:0.9,
+        rotation: Math.PI/2,
+        scale: 0.5
+      })
     }
 
     // Adding Discard Pile
