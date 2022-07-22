@@ -11,12 +11,17 @@ function Game() {
 	this.playCard = function(player, card) {
 		if(this.canPlay(player, card)) {
 			this.state.topcard = card
-			this.state.hands[player].splice(this.state.hands[player].findIndex(function(c) {
+			const idx = this.state.hands[player].findIndex(function(c) {
 				if(card.number >= 13) {
 					return c.number === card.number
 				}
-				return card == c
-			}), 1)
+				return card.color == c.color && card.number == c.number
+			})
+			if(idx >= 0) {
+				this.state.hands[player].splice(idx, 1)
+			} else {
+				console.log(this.state.hands[player], card)
+			}
 			if(this.state.hands[player].length === 0) {
 				this.state.outcome = 'Player ' + (player + 1) + ' won'
 			}

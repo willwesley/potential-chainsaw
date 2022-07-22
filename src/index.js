@@ -29,7 +29,13 @@ Stage(function(stage) {
       height: stage.height(),
       width: stage.width()
     })
-    // The hand
+    // The hands
+    const leHands = [
+      ['0','1','2','3'],
+      ['1','2','3','0'],
+      ['2','3','0','1'],
+      ['3','0','1','2'],
+    ][me]
     for(let hand in game.state.hands) {
       const handsprite = Stage.create().appendTo(stage);
       const numCards = game.state.hands[hand].length
@@ -71,14 +77,15 @@ Stage(function(stage) {
         })
       }
       let pin = {}
-      if(hand === '0'){
+
+      if(hand == leHands[0]){
         pin.alignX = 0.45
         pin.alignY = 0.95
-      } else if(hand === '1'){
+      } else if(hand === leHands[1]){
         pin.alignX = 0.05
         pin.alignY = 0.4
         pin.rotation = Math.PI/2
-      } else if(hand === '2'){
+      } else if(hand === leHands[2]){
         pin.alignX = 0.55
         pin.alignY = 0.05
         pin.rotation = Math.PI
