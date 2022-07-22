@@ -6,15 +6,28 @@ const Textures = require('./textures')
 Stage(function(stage) {
 
   const game = new Game();
+  const ws = window.ws
+  ws.ongamemessage = function(data) {
+    const state = JSON.parse(data.data);
+    if(state.player) {
+      me = state.player;
+      document.querySelector('#playing').innerText = `Player ${me.toUpperCase()}`;
+    } else {
+      game.state = state;
+      document.querySelectorAll('.title h1').forEach(c => c.innerText = game.state.outcome)
+      redraw();
+    }
+  }
 
   // Set view box
-  stage.viewbox(500, 500);
+  stage.viewbox(1024,768);
 
 
   function redraw() {
     stage.empty()
     Stage.image('background').appendTo(stage).pin({
-      scale:0.6
+      height: stage.height(),
+      width: stage.width()
     })
     // The hand
     for(let hand in game.state.hands) {
@@ -26,28 +39,33 @@ Stage(function(stage) {
         if(card.number === 13){
           sprite.image('wild')
         }
+        if(card.number === 14){
+          sprite.image('plus4')
+        }
         sprite.pin('alignY', 1)
         sprite.offset(50*(i-Math.floor(numCards/2)), 0)
         sprite.on("click", function(point){
           if(point.x < 50 || 1*i === (numCards - 1)) {
-            if(card.number === 13) {
+            if(card.number >= 13) {
               const wildPicker = Stage.create().appendTo(stage);
               for(let color in Game.COLORS) {
-                Stage.image(Game.COLORS[color] + 13)
+                Stage.image(Game.COLORS[color] + card.number)
                   .appendTo(wildPicker)
                   .offset(50*(color-2), 0)
                   .on('click', function() {
-                    game.playCard(hand*1, {
-                      color: Game.COLORS[color],
-                      number: 13
-                    })
-                    redraw()
+                    ws.send(JSON.stringify({
+                      play: {
+                        color: Game.COLORS[color],
+                        number: card.number
+                      }
+                    }))
                   })
               }
               wildPicker.pin('align', 0.5)
             } else {
-              game.playCard(hand*1, card)
-              redraw()
+              ws.send(JSON.stringify({
+                play: card
+              }))
             }
           }
         })
@@ -55,17 +73,17 @@ Stage(function(stage) {
       let pin = {}
       if(hand === '0'){
         pin.alignX = 0.45
-        pin.alignY = 1.0
+        pin.alignY = 0.95
       } else if(hand === '1'){
-        pin.alignX = 0
+        pin.alignX = 0.05
         pin.alignY = 0.4
         pin.rotation = Math.PI/2
       } else if(hand === '2'){
         pin.alignX = 0.55
-        pin.alignY = 0
+        pin.alignY = 0.05
         pin.rotation = Math.PI
      } else {
-        pin.alignX = 1.0
+        pin.alignX = 0.95
         pin.alignY = 0.55
         pin.rotation = -Math.PI/2
       }
@@ -88,11 +106,18 @@ Stage(function(stage) {
       alignY: 0.5
     })
     drawpile.on("click", function(){
-      game.drawCard()
-      redraw()
+      ws.send(JSON.stringify({
+        draw: true
+      }))
     })
+
+    if(game.state.outcome !== 'In Progress') {
+      Stage.string('winner').value(game.state.outcome).appendTo(stage).pin({
+        'alignX': 0.5,
+        'alignY': 0.35
+      })
+    }
   }
-  redraw()
 });
 
 // Adding a texture

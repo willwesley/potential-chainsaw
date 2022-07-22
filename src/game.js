@@ -17,7 +17,9 @@ function Game() {
 				}
 				return card == c
 			}), 1)
-			console.log(card)
+			if(this.state.hands[player].length === 0) {
+				this.state.outcome = 'Player ' + (player + 1) + ' won'
+			}
 			if(card.number === 10) {
 				this.nextPlayer() 
 			}
@@ -33,17 +35,29 @@ function Game() {
 				this.state.hands[this.state.activePlayer].push(this.randomCard())
 				this.state.hands[this.state.activePlayer].push(this.randomCard())
 		    }
+		    if(card.number === 14) {
+				this.nextPlayer()
+				this.state.hands[this.state.activePlayer].push(this.randomCard())
+				this.state.hands[this.state.activePlayer].push(this.randomCard())
+				this.state.hands[this.state.activePlayer].push(this.randomCard())
+				this.state.hands[this.state.activePlayer].push(this.randomCard())
+		    }
 
 			this.nextPlayer()
 		}
 	}
 
 	this.drawCard = function() {
-		this.state.hands[this.state.activePlayer].push(this.randomCard())
-		this.nextPlayer()
+		if(this.state.outcome === 'In Progress') {
+			this.state.hands[this.state.activePlayer].push(this.randomCard())
+			this.nextPlayer()
+		}
 	}
 
 	this.canPlay = function(player, card) {
+		if(this.state.outcome !== 'In Progress') {
+			return false
+		}
 		if(this.state.activePlayer !== player) {
 			return false
 		}
@@ -53,7 +67,7 @@ function Game() {
 		if(card.number === this.state.topcard.number) {
 			return true
 		}
-		if (card.number === 13) {
+		if (card.number >= 13) {
 			return true
 		}
 		return false
