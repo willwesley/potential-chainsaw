@@ -6,8 +6,8 @@ body {
   margin-bottom: 2em;
 }
 
-canvas {
-  background: #fff;
+html,body {
+  height: 100%;
 }
 
 .title {
@@ -20,7 +20,7 @@ h1 {
 .container {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 98%;
 }
 .input {
   display: flex;
@@ -59,4 +59,10 @@ h1 {
 }
 #messages>div.server {
   font-weight: bolder;
+}
+.chat {
+  z-index: 1;
+  position: relative;
+  background: white;
+  height: 92%;
 }
