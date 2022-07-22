@@ -1,16 +1,100 @@
 <!doctype html>
 <html>
-
   <head>
-    <title>UCCS Programming Code Camp 2022</title>
+    <title>Checkers - UCCS Programming Code Camp 2022</title>
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link href="style.css" rel="stylesheet" />
     <link rel="icon" href="favicon.png" type="image/png">
   </head>
-
   <body>
+    <div class='chat'>
+      <div class="gamebox">
+        <span>Current Game:</span>
+        <button id="p1">Black</button>
+        <button id="p2">Red</button>
+        <button id="p0">Observe</button>
+      </div>
+      <div class="title"><h1>Chat</h1></div>
+      <div class="container messages">
+        <div id="messages" class="messages"></div>
+        <div class="input">
+          <input id="message" placeholder="Message">
+          <button id="send" disabled="true">Send</button>
+        </div>
+      </div>
+    </div>
+    <div class="title">
+      <h1>Waiting</h1>
+      <div id="playing">Observer</div>
+    </div>
+
+    <script type="text/javascript">
+      const ws = new WebSocket('ws://' + window.location.host);
+      window.ws = ws
+
+      // Browser WebSockets have slightly different syntax than `ws`.
+      // Instead of EventEmitter syntax `on('open')`, you assign a callback
+      // to the `onopen` property.
+      ws.onopen = function() {
+        document.querySelector('#send').disabled = false;
+
+        document.querySelector('#send').addEventListener('click', send);
+        document.querySelector('#message').addEventListener('keypress', function(event) {
+          if(event.key === "Enter") {
+            send()
+          }
+        });
+
+        function send() {
+          ws.send(document.querySelector('#message').value);
+          document.querySelector('#message').value = ""
+        }
+      };
+
+      ws.onmessage = function(msg) {
+        const data = JSON.parse(msg.data)
+        const messageDiv = document.createElement('div')
+        messageDiv.innerHTML = '<span class="name"></span><span class="msg"></span>'
+        messageDiv.querySelector('.name').innerText = data.who + ':';
+        messageDiv.querySelector('.msg').innerText = data.data;
+        if(data.who == 'SERVER') {
+          messageDiv.className = 'server';
+          try {
+            const parsed = JSON.parse(data.data)
+            if(parsed.players) {
+              document.querySelector('#p1').disabled = parsed.players[1]
+              document.querySelector('#p2').disabled = parsed.players[2]
+            }
+          } catch {}
+        }
+        if(data.who == 'GAME' && !!ws.ongamemessage) {
+          ws.ongamemessage(data)
+        }
+        if(data.who == 'RESET') {
+          ws.onquiter()
+        }
+        document.querySelector('#messages').append(messageDiv);
+      };
+
+      ws.onclose = function clear() {
+        document.querySelector('#send').disabled = true;
+        const messageDiv = document.createElement('div')
+        messageDiv.innerHTML = '<span class="name"></span><span class="msg">Server Disconnected</span>'
+        messageDiv.className = 'server';
+        document.querySelector('#messages').append(messageDiv);
+      };
+
+      for(let i = 0; i <= 2; i++) {
+        document.querySelector('#p' + i).onclick = () => {
+          document.querySelector('.chat').hidden = true
+          ws.send(JSON.stringify({ claim: i }))
+        }
+      }
+      ws.onquiter = function() {
+        document.querySelector('.chat').hidden = false
+      }
+    </script>
     <script src="app.js"></script>
   </body>
-
 </html>

@@ -3,6 +3,22 @@ const Game = require('./checkers')
 
 // Create new app
 Stage(function(stage) {
+
+  let me;
+  const ws = window.ws
+  ws.ongamemessage = function(data) {
+    const state = JSON.parse(data.data);
+    if(state.player) {
+      me = state.player;
+      console.log(me)
+      document.querySelector('#playing').innerText = `Player ${me.toUpperCase()}`;
+    } else {
+      game.state = state;
+      document.querySelectorAll('.title h1').forEach(c => c.innerText = game.state.outcome)
+      redraw();
+    }
+  }
+
   // click ammends
   let from
   // Set view box
@@ -34,11 +50,9 @@ Stage(function(stage) {
               Math.floor((point.y - 90)/150),
               Math.floor((point.x - 90)/150),
             ]
-            console.log(to)
-            game.place(game.state.activePlayer,from,to)
+            ws.send(JSON.stringify({place: [from, to]}))
             board.off(Stage.Mouse.MOVE, Move)
             board.off(Stage.Mouse.END, Stop)
-            redraw()
           }
           board.on(Stage.Mouse.MOVE, Move)
           board.on(Stage.Mouse.END, Stop)
@@ -46,7 +60,6 @@ Stage(function(stage) {
       }
     }
   }
-  redraw()
 
 });
 
