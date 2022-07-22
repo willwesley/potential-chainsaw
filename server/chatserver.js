@@ -53,6 +53,7 @@ module.exports = function ChatServer(wss, HeartBeat) {
 
     ws.on('close', function wsclose() {
       sendEveryone(makeMessage('SERVER', 'Bye ' + ws.name))
+      chump(ws)
     });
 
   });
