@@ -6,6 +6,18 @@ const Textures = require('./textures')
 Stage(function(stage) {
 
   const game = new Game();
+  const ws = window.ws
+  ws.ongamemessage = function(data) {
+    const state = JSON.parse(data.data);
+    if(state.player) {
+      me = state.player;
+      document.querySelector('#playing').innerText = `Player ${me.toUpperCase()}`;
+    } else {
+      game.state = state;
+      document.querySelectorAll('.title h1').forEach(c => c.innerText = game.state.outcome)
+      redraw();
+    }
+  }
 
   // Set view box
   stage.viewbox(1024,768);
@@ -41,17 +53,19 @@ Stage(function(stage) {
                   .appendTo(wildPicker)
                   .offset(50*(color-2), 0)
                   .on('click', function() {
-                    game.playCard(hand*1, {
-                      color: Game.COLORS[color],
-                      number: card.number
-                    })
-                    redraw()
+                    ws.send(JSON.stringify({
+                      play: {
+                        color: Game.COLORS[color],
+                        number: card.number
+                      }
+                    }))
                   })
               }
               wildPicker.pin('align', 0.5)
             } else {
-              game.playCard(hand*1, card)
-              redraw()
+              ws.send(JSON.stringify({
+                play: card
+              }))
             }
           }
         })
@@ -92,8 +106,9 @@ Stage(function(stage) {
       alignY: 0.5
     })
     drawpile.on("click", function(){
-      game.drawCard()
-      redraw()
+      ws.send(JSON.stringify({
+        draw: true
+      }))
     })
 
     if(game.state.outcome !== 'In Progress') {
@@ -103,7 +118,6 @@ Stage(function(stage) {
       })
     }
   }
-  redraw()
 });
 
 // Adding a texture
