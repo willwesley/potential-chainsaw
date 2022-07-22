@@ -34,7 +34,6 @@ Stage(function(stage) {
   const staminaBar = Stage.image('staminaBar').appendTo(stage);
   const healthBar = Stage.image('healthBar').appendTo(stage);
   const ultBar = Stage.image('ultBar').appendTo(stage);
-  const ultB = Stage.image('ultB').appendTo(stage);
   const bucket = Stage.create().appendTo(stage).pin('align', 0.5)
 
   ult.pin({
@@ -45,28 +44,14 @@ Stage(function(stage) {
     if(game.state[me].ultBar === 100) {
       ws.send(JSON.stringify({action: 'ult'}))
 
-      this.tween().ease('bounce').pin ({
-        scale : 1.2
-      })
-
-      jotaro.image('jotaroWhite').pin({
-        alignX: 0,
-        alignY: 0.8,
-        scale:1.5
-
-      })
-      setTimeout(function() {
-        jotaro.image('starPlatinum').pin({
-          alignX: 0.1,
-          alignY:0.9,
-          scale:1.5
-        })
-        Stage.anim('shake', fps = 15).appendTo(jotaro).pin({
-          alignX: 0.4,
-          alignY: -0.4,
-          scale: 0.8
-        }).play()
-      }, 100)
+      // this.tween().ease('bounce').pin ({
+      //   scale : 1.2
+      // })
+      if(me === 'PlayerA') {
+        flashJotaro()
+      } else {
+        flashDio()
+      }
     }
   }).on(Stage.Mouse.START, function(){
     if(game.state[me].ultBar === 100) {
@@ -168,9 +153,45 @@ Stage(function(stage) {
   });
 
 
+  function flashJotaro() {
+    jotaro.image('jotaroWhite').pin({
+      alignX: 0,
+      alignY: 0.8,
+      scale:1.5
 
+    })
+    setTimeout(function() {
+      jotaro.image('starPlatinum').pin({
+        alignX: 0.1,
+        alignY:0.9,
+        scale:1.5
+      })
+      Stage.anim('shake', fps = 15).appendTo(jotaro).pin({
+        alignX: 0.4,
+        alignY: -0.4,
+        scale: 0.8
+      }).play()
+    }, 100)    
+  }
 
+  function flashDio() {
+    dio.image('dioWhite').pin({
+      alignX: 0.92,
+      alignY: 0.6,
+      scale:0.7
 
+    })
+    setTimeout(function() {
+      dio.image('theWorld').pin({
+        alignX: 0.86
+      })
+      Stage.anim('shake', fps = 15).appendTo(dio).pin({
+        alignX: 0.4,
+        alignY: -0.9,
+        scale: 0.8
+      }).play()
+    }, 100)    
+  }
 
 
 
@@ -185,9 +206,88 @@ Stage(function(stage) {
 
   function update() {
     bucket.empty()
-    jotaro.empty().image('jotaro')
-    dio.empty().image('dio')
-
+    if(game.state.turnEnd) {
+      jotaro.empty().image('jotaro')
+      dio.empty().image('dio')
+    }
+    if(game.state.lastActions.A === 'ult') {
+      flashJotaro()
+      if(game.state.lastActions.B === 'shield') {
+        Stage.anim('heavyDamShake').appendTo(dio).pin({
+          alignY:0.1,
+          alignX: 0.5,
+        }).play()
+      } else {
+        Stage.anim('ultDamShake').appendTo(dio).pin({
+          alignY: -0.3,
+          alignX: 0.6,
+        }).play()
+      }
+    }
+    if(game.state.lastActions.B === 'ult') {
+      flashDio()
+      if(game.state.lastActions.B === 'shield') {
+        Stage.anim('heavyDamShake').appendTo(jotaro).pin({
+          alignY: -0.2,
+          alignX: 0.5,
+        }).play()
+      } else {
+        Stage.anim('ultDamShake').appendTo(jotaro).pin({
+          alignY: -0.2,
+          alignX: 0.5,
+        }).play()
+      }
+    }
+    if(game.state.lastActions.B === 'shield') {
+      Stage.anim('shieldShake').appendTo(dio).pin({
+          alignY: -0.2,
+          alignX: 0.5,
+        }).play()
+    }
+    if(game.state.lastActions.A === 'shield') {
+      Stage.anim('shieldShake').appendTo(jotaro).pin({
+          alignY: -0.2,
+          alignX: 0.3,
+        }).play()
+    }
+    if(game.state.lastActions.B === 'lightAttack') {
+      Stage.anim('lightDamShake').appendTo(jotaro).pin({
+          alignY: -0.2,
+          alignX: 0.5,
+        }).play()
+    }
+    if(game.state.lastActions.A === 'lightAttack') {
+      Stage.anim('lightDamShake').appendTo(dio).pin({
+          alignY: -0.2,
+          alignX: 0.5,
+        }).play()
+    }
+    if(game.state.lastActions.B === 'heavyAttack') {
+      Stage.anim('heavyDamShake').appendTo(jotaro).pin({
+          alignY: -0.2,
+          alignX: 0.5,
+        }).play()
+    }
+    if(game.state.lastActions.A === 'heavyAttack') {
+      Stage.anim('heavyDamShake').appendTo(dio).pin({
+          alignY: -0.2,
+          alignX: 0.5,
+        }).play()
+    }
+    if(game.state.lastActions.B === 'heal') {
+      Stage.anim('healthShake').appendTo(dio).pin({
+          alignY: -0.5,
+          alignX: 0.5,
+          scale: 0.5,
+        }).play()
+    }
+    if(game.state.lastActions.A === 'heal') {
+      Stage.anim('healthShake').appendTo(jotaro).pin({
+          alignY: -0.5,
+          alignX: 0.5,
+          scale: 0.5,
+        }).play()
+    }
     healthScore.value(game.state[me].health);
     healthScore
 

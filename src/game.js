@@ -91,7 +91,7 @@ module.exports = function Game() {
 		if(actions.A !== "" && actions.B !== "") {
 			mechanics(this.state.PlayerA, this.state.PlayerB, actions.A, actions.B)
 			mechanics(this.state.PlayerB, this.state.PlayerA, actions.B, actions.A)
-			this.state.lastActions = actions
+			this.state.lastActions = {...actions}
 			actions.A = ""
 			actions.B = ""
 			if(this.state.PlayerA.health <= 0 && this.state.PlayerB.health <= 0) {

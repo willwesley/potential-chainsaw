@@ -98,3 +98,59 @@ Stage({
     'PlayerB won' : { x : 33, y : 95, width : 645, height : 274},
   }
 })
+Stage({
+  image: 'draw.png',
+  textures : {
+    'Draw' : { x : 57, y : 94, width : 580, height : 275},
+  }
+})
+Stage({
+  image: 'popups.png',
+  textures : {
+    lightDam : { x : 3, y : 10, width : 21, height : 13},
+    lightDamShake : [
+      { x : 3, y : 10, width : 21, height : 13},
+      { x : 3,  y : 10.5, width : 21, height : 16 }
+    ],
+  }
+})
+Stage({
+  image: 'popups.png',
+  textures : {
+    heavyDam : { x : 4, y : 32, width : 22, height : 16},
+    heavyDamShake : [
+      { x : 4, y : 32, width : 22, height : 16},
+      { x : 4,  y : 33, width : 22, height : 20 }
+    ],
+  }
+})
+Stage({
+  image: 'popups.png',
+  textures : {
+    ultDam : { x : 53, y : 21, width : 24, height : 16},
+    ultDamShake : [
+      { x : 53, y : 21, width : 24, height : 16},
+      { x : 53,  y : 22, width : 24, height : 20 }
+    ],
+  }
+})
+Stage({
+  image: 'popups.png',
+  textures : {
+    shieldBubble : { x : 49, y : 49, width : 51, height : 49},
+    shieldShake : [
+      { x : 49, y : 49, width : 51, height : 49},
+      { x : 49,  y : 52, width : 51, height : 59 }
+    ],
+  }
+})
+Stage({
+  image: 'popups.png',
+  textures : {
+    greenHealth : { x : 4, y : 52, width : 31, height : 29},
+    healthShake : [
+      { x : 4, y : 52, width : 31, height : 29},
+      { x : 4,  y : 55, width : 31, height : 39 }
+    ]
+  }
+})

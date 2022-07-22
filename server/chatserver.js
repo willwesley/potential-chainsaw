@@ -25,15 +25,22 @@ module.exports = function ChatServer(wss, HeartBeat) {
           ws.player = [' ', 'PlayerA', 'PlayerB'][cmd.claim]
           ws.send(...makeMessage('GAME', '{"player":"'+ws.player+'"}'))
           sendPlayerStates()
-          if(game) {
-            ws.send(...makeMessage('GAME', JSON.stringify(game.state)));
-          }
           if(!!players[1] && !!players[2]) {
             game = new Game();
             game.onTurnEnd = function() {
-              sendEveryone(makeMessage('GAME', JSON.stringify(game.state)))
+              sendEveryone(makeMessage('GAME', JSON.stringify({
+                ...game.state,
+                turnEnd: true,
+              })))
             }
-            sendEveryone(makeMessage('GAME', JSON.stringify(game.state)))
+            sendEveryone(makeMessage('GAME', JSON.stringify({
+              ...game.state,
+              turnEnd: true,
+              lastActions: { A: '', B: '' }
+            })))
+          }
+          if(game) {
+            ws.send(...makeMessage('GAME', JSON.stringify(game.state)));
           }
         } else if(game && game.state.outcome != 'In Progress' && cmd.reset) {
           players = []
